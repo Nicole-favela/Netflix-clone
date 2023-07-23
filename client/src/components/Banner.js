@@ -4,6 +4,7 @@ import { useState , useEffect} from 'react';
 import axios from "axios";
 import url from '../constant.js'
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
+import { CardMedia } from '@mui/material';
 
 function Banner() {
     const [movie, setMovie] = useState([])
@@ -55,6 +56,9 @@ function Banner() {
                 
                 
                 </h1>
+
+                {/* test player here */}
+                <CardMedia/>
             </div>
         </div>
 
