@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Home from './pages/Home';
+import Login from './pages/Login'
 
 import './App.css';
 import {
@@ -10,16 +11,23 @@ import {
 } from "react-router-dom"
 
 function App() {
+  const user = null;
   return (
     <div className="app">
       <Router>
-        <Routes>
-          <Route path="/" element={ <Home/>}>
-          
-          </Route>
+        {!user ?(
+          <Login/>
+        ): (
+          <Routes>
+            <Route path="/" element={ <Home/>}>
+            
+            </Route>
 
-       </Routes>
+         </Routes>
 
+
+        )}
+      
       </Router>
      
     </div>
