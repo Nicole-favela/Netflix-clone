@@ -47,7 +47,7 @@
 }
 .login__body > h2{
     font-size: 2rem;
-    font-weight: 300px;
+    font-weight: 350px;
     margin-top: 40px;
 }
 .login__body{
@@ -59,21 +59,26 @@
     z-index: 1;
     color: white;
     padding: 20px;
+    left: 0;
+    right: 0;
+  
 
 
 }
 .login__input > form > input{
     padding: 10px;
     outline-width: 0;
-    height: 30px;
-    width: 30%;
+    height: 28px;
+    width: 40%;
 
     border:none;
     max-width: 600px;
+   
 
 }
 .login__input{
     margin: 20px;
+    
 
 }
 .login__enterbtn{
@@ -84,5 +89,19 @@
     border:none;
     font-weight: 600px;
     cursor:pointer;
+
+}
+/* create account button style */
+.login__enterbtn{
+    padding: 11px 25px;
+    font-size: 1.3rem;
+    color: white;
+    background-color: red;
+    border:none;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 10px;
+    
+    
 
 }

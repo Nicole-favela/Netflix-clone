@@ -1,10 +1,12 @@
-import React from 'react'
+import React, {useState} from 'react'
 import './Login.css'
 import Button from '@mui/material/Button';
 import netflixbackground from '../assets/Netlfix_dummy_banner.webp'
 import netflixlogo from '../assets/Netflix-logo-on-transparent-background.png'
+import SignIn from './SignIn';
 
 function Login() {
+  const [signIn, setSignIn]= useState(false)
   return (
     <div className='login'>
         <div className='login__backgroundimg'>
@@ -13,7 +15,7 @@ function Login() {
                 src={netflixlogo}
                 alt=""
             />
-            <button className='login__button'>
+            <button onClick={()=> setSignIn(true)} className='login__button'>
                 Sign In
             </button>
             <div className='login__gradient' />
@@ -22,6 +24,11 @@ function Login() {
         </div>
 
         <div className='login__body'>
+          {signIn ? (
+            <SignIn/>
+          ): (
+            
+       
           <>
           <h1>See what's next.  </h1>
           <h2>Cancel anytime.</h2>
@@ -29,11 +36,12 @@ function Login() {
             <form>
               <input type="email" placeholder='Email 
               Address'/>
-              <button className='login__enterbtn'>Create Account</button>
+              <button onClick={()=> setSignIn(true)} className='login__enterbtn'>Create Account</button>
             </form>
           </div>
           
           </>
+          )}
 
         </div>
     
