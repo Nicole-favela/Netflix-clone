@@ -11,6 +11,7 @@ import {
 } from "react-router-dom"
 
 function App() {
+  //const user = {email: "dave@gmail.com"};
   const user = null;
   return (
     <div className="app">

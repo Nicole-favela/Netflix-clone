@@ -32,17 +32,47 @@ const darkTheme = createTheme({
   });
 
 //  for signing in or signing up
-function SignIn() {
-    const register = (event) => {
-        event.preventDefault(); //prevents refresh when entering info
+function SignIn({signup}) {
+    //create new user
+    // const register = (event) => {
+    //     event.preventDefault(); //prevents refresh when entering info
+    //     // const data = new FormData(event.currentTarget);
+    //     // console.log({
+    //     //   email: data.get('email'),
+    //     //   password: data.get('password'),
+    //     // });
+    //   };
+    const signIn= async (event) =>{
+        event.preventDefault()
+
+        //get form data 
         const data = new FormData(event.currentTarget);
-        console.log({
+        const form = {
           email: data.get('email'),
           password: data.get('password'),
-        });
-      };
-    const signIn=(event) =>{
-        event.preventDefault()
+        };
+        const res = await fetch('http://localhost:3001/api/login',{
+            method:'POST',
+            body: JSON.stringify(form),
+            headers:{
+                "content-type": "application/json"
+            }
+        })
+
+        //check token from backend
+        const {token} = await res.json();
+
+        //if res is not ok, let user know pw or email was incorrect
+        if(res.user){
+          alert('user created!')
+        }
+        if(res.ok){
+           alert('success!')
+           window.location.href = '/'
+        }
+        else{
+          alert('the password or email was incorrect, please try again')
+        }
     }
     
   return (
@@ -63,7 +93,7 @@ function SignIn() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" onSubmit={register} noValidate sx={{ mt: 1,  }}>
+          <Box component="form" onSubmit={signIn} noValidate sx={{ mt: 1,  }}>
             <TextField
               margin="normal"
               required
@@ -91,7 +121,7 @@ function SignIn() {
             /> */}
             <ThemeProvider theme={buttontheme}>
                 <Button
-                onClick={signIn}
+                // onClick={signIn}
                 type="submit"
                 fullWidth
                 variant="contained"
@@ -113,7 +143,7 @@ function SignIn() {
                 </Link>
               </Grid> */}
               <Grid item>
-                <Link href="#" variant="body2" sx={{color: "white"}}>
+                <Link href="/" variant="body2" sx={{color: "white"}}>
                   {"New to Netflix? Sign Up"}
                 </Link>
               </Grid>
