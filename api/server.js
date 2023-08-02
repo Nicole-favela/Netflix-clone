@@ -95,7 +95,7 @@ app.post('/api/login', async(req, res)=>{
     //check if user's password matches
     const matched = await bcrypt.compare(password, user.password)
     if (!matched){
-        res.status(406).json({message: "password does not match"})
+        res.json({message: "password does not match"})
     }
 
     //create jwt token
@@ -105,13 +105,15 @@ app.post('/api/login', async(req, res)=>{
 
     }
     const token = jwt.sign(payload,process.env.JWT_SECRET)
+    console.log('token is: ', token)
 
    
-    res.json({message: 'successfully logged in', token})
+    res.json({message: 'successfully logged in', token, user})
 
   }
   catch(err){
-    res.json({status: 'error'})
+    //res.json({status: 'error'})
+    res.status(500).send('server error');
 
   }
 

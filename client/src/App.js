@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import Home from './pages/Home';
 import Login from './pages/Login'
+import {useDispatch, useSelector} from "react-redux"
+import {login, logout, selectUser} from "./features/userSlice"
+import Profile from './pages/Profile';
+import Cookies from "js-cookie";
 
 import './App.css';
 import {
@@ -11,16 +15,41 @@ import {
 } from "react-router-dom"
 
 function App() {
+
+  const dispatch = useDispatch()
+  const user = useSelector(selectUser)
+  const token = Cookies.get("token");
+  // useEffect(()=>{
+
+  // },[user])
   //const user = {email: "dave@gmail.com"};
-  const user = null;
+  // useEffect(()=>{
+  //   if(loggedIn){
+  //     //dispatch user object, email
+  //     dispatch(login({}))
+
+  //   }else{
+  //     dispatch(logout)
+  //   }
+
+  // },[])
+  //const user = null;
+  
+  //const user = useSelector(selectUser); //gives you the user
   return (
     <div className="app">
       <Router>
-        {!user ?(
+        {!token ?(
           <Login/>
         ): (
           <Routes>
-            <Route path="/" element={ <Home/>}>
+
+            <Route path="/profile" element={ <Profile/>}>
+            
+            </Route>
+
+
+            <Route exact path="/" element={ <Home/>}>
             
             </Route>
 

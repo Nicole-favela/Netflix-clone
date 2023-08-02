@@ -1,19 +1,20 @@
-import React from 'react'
+import React, {useState} from 'react'
 import "./SignIn.css"
 
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
+
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { styled } from "@mui/system";
+
+import { useNavigate } from 'react-router-dom';
+import {useDispatch} from "react-redux"
+import {login, logout} from "../features/userSlice"
+import Cookie from "js-cookie";
 const darkTheme = createTheme({
     palette: {
       mode: 'dark',
@@ -33,6 +34,11 @@ const darkTheme = createTheme({
 
 //  for signing in or signing up
 function SignIn({signup}) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const dispatch = useDispatch()
+  
+  const navigate = useNavigate()
     //create new user
     // const register = (event) => {
     //     event.preventDefault(); //prevents refresh when entering info
@@ -45,12 +51,17 @@ function SignIn({signup}) {
     const signIn= async (event) =>{
         event.preventDefault()
 
+
         //get form data 
-        const data = new FormData(event.currentTarget);
+        //const data = new FormData(event.currentTarget);
+        // const form = {
+        //   email: data.get('email'),
+        //   password: data.get('password'),
+        // };
         const form = {
-          email: data.get('email'),
-          password: data.get('password'),
-        };
+          email,
+          password,
+        }
         const res = await fetch('http://localhost:3001/api/login',{
             method:'POST',
             body: JSON.stringify(form),
@@ -60,15 +71,23 @@ function SignIn({signup}) {
         })
 
         //check token from backend
-        const {token} = await res.json();
+        const {token, user} = await res.json();
+        if(user){
+          console.log("we have a user named: ",user)
+        }
 
         //if res is not ok, let user know pw or email was incorrect
-        if(res.user){
-          alert('user created!')
-        }
+      
         if(res.ok){
-           alert('success!')
-           window.location.href = '/'
+           alert('success, redirecting to home page...!')
+           Cookie.set("token", token);
+           dispatch(login({
+            email: user.email,
+            password: user.password
+          
+          }));
+           navigate('/') //show home page
+          
         }
         else{
           alert('the password or email was incorrect, please try again')
@@ -90,9 +109,9 @@ function SignIn({signup}) {
           }}
         >
          
-          <Typography component="h1" variant="h5">
+          {/* <Typography component="h1" variant="h5">
             Sign in
-          </Typography>
+          </Typography> */}
           <Box component="form" onSubmit={signIn} noValidate sx={{ mt: 1,  }}>
             <TextField
               margin="normal"
@@ -103,6 +122,7 @@ function SignIn({signup}) {
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={(e) => setEmail(e.target.value)}
             
             />
             <TextField
@@ -114,6 +134,7 @@ function SignIn({signup}) {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={(e) => setPassword(e.target.value)}
             />
             {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -121,7 +142,7 @@ function SignIn({signup}) {
             /> */}
             <ThemeProvider theme={buttontheme}>
                 <Button
-                // onClick={signIn}
+                onClick={signIn}
                 type="submit"
                 fullWidth
                 variant="contained"
