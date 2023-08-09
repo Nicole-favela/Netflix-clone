@@ -80,7 +80,7 @@ function SignIn({signup}) {
       
         if(res.ok){
            alert('success, redirecting to home page...!')
-           Cookie.set("token", token);
+           //Cookie.set("token", token);
            dispatch(login({
             email: user.email,
             password: user.password

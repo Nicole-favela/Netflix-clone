@@ -27,7 +27,7 @@ function Nav() {
   return (
     <div className={`nav ${show && "nav__black"}`}>
       <div className='nav__contents'>
-          <img className="nav__logo"src={netflix_img} alt="netflix-logo"/>
+          <img className="nav__logo"src={netflix_img} alt="netflix-logo" onClick={()=>navigate('/',{replace: true})}/>
 
          <img className="nav__avatar" src={user_icon} alt="user-avatar" onClick={()=>navigate('/profile',{replace: true})}/>
 

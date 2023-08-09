@@ -17,8 +17,9 @@ import {
 function App() {
 
   const dispatch = useDispatch()
-  const user = useSelector(selectUser)
-  const token = Cookies.get("token");
+  //const user = useSelector(selectUser)
+  let token = Cookies.get("token");
+  //let token = null;
   // useEffect(()=>{
 
   // },[user])
@@ -33,13 +34,13 @@ function App() {
   //   }
 
   // },[])
-  //const user = null;
+  const user = null;
   
   //const user = useSelector(selectUser); //gives you the user
   return (
     <div className="app">
       <Router>
-        {!token ?(
+        {!token?(
           <Login/>
         ): (
           <Routes>
