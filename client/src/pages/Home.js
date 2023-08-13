@@ -4,6 +4,7 @@ import Banner from '../components/Banner'
 import ContentRow from '../components/ContentRow'
 
 
+
 function Home() {
   return (
     <div className="home">

@@ -72,14 +72,15 @@ function SignIn({signup}) {
 
         //check token from backend
         const {token, user} = await res.json();
-        if(user){
-          console.log("we have a user named: ",user)
+        if(!user){
+          console.log("user is null!")
         }
+        console.log("user is: ", user.email)
 
         //if res is not ok, let user know pw or email was incorrect
       
         if(res.ok){
-           alert('success, redirecting to home page...!')
+           alert('success, redirecting to home page...! user email is: ', user.email)
            //Cookie.set("token", token);
            dispatch(login({
             email: user.email,

@@ -105,7 +105,7 @@ app.post('/api/login', async(req, res)=>{
 
     }
     const token = jwt.sign(payload,process.env.JWT_SECRET)
-    console.log('token is: ', token)
+    console.log('token is: ', token, "and user is: ", user)
 
    
     res.json({message: 'successfully logged in', token, user})

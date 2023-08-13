@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from "react-redux"
 import {login, logout, selectUser} from "./features/userSlice"
 import Profile from './pages/Profile';
 import Cookies from "js-cookie";
+import PrivateRoutes from './utils/PrivateRoutes';
 
 import './App.css';
 import {
@@ -18,8 +19,8 @@ function App() {
 
   const dispatch = useDispatch()
   //const user = useSelector(selectUser)
-  let token = Cookies.get("token");
-  //let token = null;
+  //let token = Cookies.get("token");
+  let token = null;
   // useEffect(()=>{
 
   // },[user])
@@ -40,24 +41,28 @@ function App() {
   return (
     <div className="app">
       <Router>
-        {!token?(
+        {/* {!token?(
           <Login/>
-        ): (
+        ): ( */}
           <Routes>
-
-            <Route path="/profile" element={ <Profile/>}>
-            
+            <Route element={<PrivateRoutes/>}>
+                <Route element={<Home/>} path='/'exact/>
+                <Route element={<Profile/>} path='/profile'exact/>
             </Route>
 
-
-            <Route exact path="/" element={ <Home/>}>
+            {/* <Route path="/profile" element={}>
             
-            </Route>
+            </Route> */}
+
+
+            <Route  element={ <Login/>} path="/login" />
+            
+         
 
          </Routes>
 
 
-        )}
+        
       
       </Router>
      
