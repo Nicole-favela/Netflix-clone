@@ -1,10 +1,13 @@
 import React from 'react'
 import {Outlet, Navigate} from 'react-router-dom'
+import { useSelector } from "react-redux";
+import { selectUser } from '../features/userSlice'
 
 const PrivateRoutes = () => { 
-  let auth = {'token': true}
+  const user = useSelector(selectUser)
+  console.log("user in privateroutes is: ", user)
   return (
-    auth.token ? <Outlet/> : <Navigate to= "/login"/>
+    user ? <Outlet/> : <Navigate to= "/login"/>
   )
 }
 export default PrivateRoutes

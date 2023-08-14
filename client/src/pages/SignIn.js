@@ -81,10 +81,11 @@ function SignIn({signup}) {
       
         if(res.ok){
            alert('success, redirecting to home page...! user email is: ', user.email)
-           //Cookie.set("token", token);
+           Cookie.set("token", token);
            dispatch(login({
             email: user.email,
-            password: user.password
+            password: user.password,
+            loggedIn: true
           
           }));
            navigate('/') //show home page

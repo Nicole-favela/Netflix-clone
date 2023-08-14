@@ -5,6 +5,7 @@ import netflixbackground from '../assets/Netlfix_dummy_banner.webp'
 import netflixlogo from '../assets/Netflix-logo-on-transparent-background.png'
 import SignIn from './SignIn';
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
 
 
 //sign up page to create account or sign in
@@ -12,6 +13,7 @@ function Login() {
   const [signIn, setSignIn]= useState(false)
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
   //for creating a new user
   const handleFormSubmit = async (e) => {
     e.preventDefault(); 
@@ -38,6 +40,7 @@ function Login() {
     if(res.ok){
       console.log(res)
       console.log("success")
+      navigate("/")// go to home page
       setSignIn(true)
     }
       // You can handle the success message or redirect the user here
