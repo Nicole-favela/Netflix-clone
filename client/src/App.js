@@ -7,6 +7,7 @@ import {login, logout, selectUser} from "./features/userSlice"
 import Profile from './pages/Profile';
 import Cookies from "js-cookie";
 import PrivateRoutes from './utils/PrivateRoutes';
+//import useKey from './hooks/useKey'
 
 import './App.css';
 import {
@@ -16,6 +17,7 @@ import {
 } from "react-router-dom"
 
 function App() {
+ 
 
   const dispatch = useDispatch()
   //const user = useSelector(selectUser)
@@ -46,7 +48,7 @@ function App() {
         ): ( */}
           <Routes>
             <Route element={<PrivateRoutes/>}>
-                <Route element={<Home/>} path='/'exact/>
+                <Route element={<Home />} path='/'exact/>
                 <Route element={<Profile/>} path='/profile'exact/>
             </Route>
 

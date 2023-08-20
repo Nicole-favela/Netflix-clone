@@ -32,6 +32,65 @@ app.get('/movie/popular', async (req, res) => {
       res.status(500).json({ error: 'Error fetching movies data' });
     }
   });
+  app.get('/discover/horror', async (req, res) => {
+    try {
+      const response = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=release_date.desc&page=1&with_genres=27`);
+      const data = await response.json();
+  
+      res.json(data);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Error fetching horror movies data' });
+    }
+  });
+  app.get('/discover/action', async (req, res) => {
+    try {
+      const response = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=release_date.desc&page=1&with_genres=28`);
+      const data = await response.json();
+  
+      res.json(data);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Error fetching action movies data' });
+    }
+  });
+  app.get('/discover/sci-fi', async (req, res) => {
+    try {
+      const response = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=release_date.desc&page=1&with_genres=878`);
+      const data = await response.json();
+  
+      res.json(data);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Error fetching sci-fi movies data' });
+    }
+  });
+  app.get('/discover/comedy', async (req, res) => {
+    try {
+      const response = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=release_date.desc&page=1&with_genres=35`);
+      const data = await response.json();
+  
+      res.json(data);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Error fetching comedy movies data' });
+    }
+  });
+
+// app.get('/genre/movie/list', async (req, res) => {
+//     try {
+//       const response = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=en-US`);
+//       const data = await response.json();
+  
+//       res.json(data);
+//     } catch (error) {
+//       console.error(error);
+//       res.status(500).json({ error: 'Error fetching genre movies data' });
+//     }
+//   });
+app.get('/getkey', (req, res)=>{
+  res.json(API_KEY)
+})
 app.post('/api/register', async (req, res)=>{
   const {email, password} = req.body; //destructure data from req body
   try{

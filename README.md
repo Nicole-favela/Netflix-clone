@@ -1,8 +1,16 @@
 # Netflix clone
 
-Netflix clone built with tmbd api.
+Built with tmbd api, MUI components, react redux, and JWT authentication.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
+**features:**
+
+- User authentication
+-  Intuitive Netflix like movie layout by popularity & genre
+- Profile page
+
+
+
+
 
 ## Available Scripts (development)
 
