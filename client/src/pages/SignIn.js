@@ -51,7 +51,7 @@ function SignIn({signup}) {
     const signIn= async (event) =>{
         event.preventDefault()
 
-
+        try{
         //get form data 
         //const data = new FormData(event.currentTarget);
         // const form = {
@@ -69,6 +69,7 @@ function SignIn({signup}) {
                 "content-type": "application/json"
             }
         })
+        console.log(res)
 
         //check token from backend
         const {token, user} = await res.json();
@@ -78,6 +79,7 @@ function SignIn({signup}) {
         console.log("user is: ", user.email)
 
         //if res is not ok, let user know pw or email was incorrect
+       
       
         if(res.ok){
            alert('success, redirecting to home page...! user email is: ', user.email)
@@ -91,9 +93,14 @@ function SignIn({signup}) {
            navigate('/') //show home page
           
         }
-        else{
-          alert('the password or email was incorrect, please try again')
-        }
+      }catch(e){
+        alert('the password or email was incorrect, please try again')
+        navigate('/') //show home page
+      }
+        // else{
+        //   alert('the password or email was incorrect, please try again')
+        //   navigate('/login') //show home page
+        // }
     }
     
   return (

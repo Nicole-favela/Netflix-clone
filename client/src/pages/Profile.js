@@ -2,13 +2,16 @@ import React from 'react'
 import Nav from '../components/Nav'
 import "./Profile.css"
 import user_icon from '../assets/netflix_penguin.png'
-import { UseSelector, useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { selectUser } from '../features/userSlice'
+import {login, logout} from "../features/userSlice"
+
 
 function Profile() {
     const user = useSelector(selectUser)
+    const dispatch = useDispatch()
     function signOut(){
-        return null
+        dispatch(logout())
     }
   return (
     <div className='profile'>

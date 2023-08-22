@@ -67,7 +67,7 @@ app.get('/movie/popular', async (req, res) => {
   });
   app.get('/discover/comedy', async (req, res) => {
     try {
-      const response = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=release_date.desc&page=1&with_genres=35`);
+      const response = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=release_date.desc&page=2&with_genres=35`);
       const data = await response.json();
   
       res.json(data);
