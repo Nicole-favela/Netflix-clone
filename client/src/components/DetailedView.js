@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
+import useRecommendations from '../hooks/useRecommendations';
 import './DetailedView.css'
 
 
@@ -17,17 +18,27 @@ const style = {
   bgcolor: '#000000',
 //   border: '4px solid #FF0D86',
   boxShadow: 100,
-//   padding around sides:
-  p: .4, 
+
+ 
 };
 
 export default function BasicModal({open, movies, movieIndex, handleClose}) {
+    const movieSeed =movies[movieIndex]?.id
+    const recommendationsUrl = `http://localhost:3001/movie/recommendations?movie_id=${movieSeed}`
+    const {data: recommendations,loading: recLoading ,error: recError} = useRecommendations(recommendationsUrl)
+    const imgUrl = 'https://image.tmdb.org/t/p/original/'
+    if(recError){
+        console.log("error loading recommendations in modal")
+    }
+    if(!recLoading){
+        console.log("movie recs are: ", recommendations)
+    }
     function truncateDescription(string, cutoffChar){
         console.log("string overview is: ", string)
         return string?.length > cutoffChar ? string.substr(0, cutoffChar -1) + '...' : string;
     
         }
-  
+       
   return (
     <div>
      
@@ -83,7 +94,27 @@ export default function BasicModal({open, movies, movieIndex, handleClose}) {
         <div className='detailedview__description'>
            <h3 className='detailedview__title'>
                 More Like This
-           </h3>
+                </h3>
+              
+                {!recLoading &&
+                  <div className='detailedview__posters'>
+                     {recommendations?.slice(0,10).map((recommendation,index)=>
+                        (recommendation.backdrop_path && (
+                            <div className='detailedview__container'>
+                           
+                              
+                            
+                              <img className='detailedview__poster' key = {index} src={`${imgUrl}${recommendation?.backdrop_path}`} alt = {recommendation?.name}/>
+                              <h4 className='detailedview__moviename'>{truncateDescription(recommendation?.title, 20)}</h4>
+                            </div>
+                        )
+                    ))}
+                 </div>
+
+                }
+              
+               
+          
         </div>
             
 
@@ -91,9 +122,6 @@ export default function BasicModal({open, movies, movieIndex, handleClose}) {
         
         </header>
 
-      
-        
-         
         </Box>
       </Modal>
     </div>
