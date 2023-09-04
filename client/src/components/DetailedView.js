@@ -5,7 +5,11 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
 import useRecommendations from '../hooks/useRecommendations';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import './DetailedView.css'
+import { useSelector,useDispatch } from 'react-redux'
+import { selectUser } from '../features/userSlice'
+import { useState } from 'react';
 
 
 const style = {
@@ -23,7 +27,10 @@ const style = {
 };
 
 export default function BasicModal({open, movies, movieIndex, handleClose}) {
+    const user = useSelector(selectUser)
+    const [like, setLike] = useState(false)
     const movieSeed =movies[movieIndex]?.id
+    //const [movieListItem, setMovieListItem] = useState(null)
     const recommendationsUrl = `http://localhost:3001/movie/recommendations?movie_id=${movieSeed}`
     const {data: recommendations,loading: recLoading ,error: recError} = useRecommendations(recommendationsUrl)
     const imgUrl = 'https://image.tmdb.org/t/p/original/'
@@ -38,6 +45,39 @@ export default function BasicModal({open, movies, movieIndex, handleClose}) {
         return string?.length > cutoffChar ? string.substr(0, cutoffChar -1) + '...' : string;
     
         }
+    async function addToList(movie){
+        // rating: Number, user generated
+        // title: String,
+        // overview: String,
+        // user_id: mongoose.Types.ObjectId, //added to associate user with their transactions
+       
+        // release_date: {type: Date},
+        // poster: String,
+        // createdAt: {type: Date, default: Date.now},
+        console.log('you added movie: ', movie, 'to your list!!!!')
+        const movie_data = {
+            rating: like,
+            title: movie.title,
+            overview: movie.overview,
+            user_id: user.user_id,
+            release_date: movie.release_date,
+            poster: movie?.backdrop_path,
+        
+
+        }
+        const res = await fetch("http://localhost:3001/movie-list", {
+            method:"POST", //creates transaction
+            body: JSON.stringify(movie_data),
+            headers:{
+              'content-type': "application/json", //makes sure json format is sent to backend
+             
+            }
+          }); 
+        
+         
+    
+
+    }
        
   return (
     <div>
@@ -59,7 +99,7 @@ export default function BasicModal({open, movies, movieIndex, handleClose}) {
           {/* contents */}
         <header className='banner' style={{
         backgroundSize: "cover",
-        backgroundImage: `url("https://image.tmdb.org/t/p/original/${movies[movieIndex]?.backdrop_path}")`,
+        backgroundImage: `url("https://image.tmdb.org/t/p/original/${movies[movieIndex]?.backdrop_path || movies[movieIndex]?.poster}")`,
         backgroundPosition: "center center"
     }}>
         <div className='banner__contents'>
@@ -81,9 +121,17 @@ export default function BasicModal({open, movies, movieIndex, handleClose}) {
                     <PlayArrowRoundedIcon className='detailedview__button-icon' fontSize='small' />
                     Play
                 </button>
-                <button className='detailedview__button'>
+                <button className='detailedview__button'  onClick={()=>addToList(movies[movieIndex])}>
                     + My List
                 </button>
+               
+                <ThumbUpIcon
+                    color="inherit" 
+                
+
+                    onClick={()=>setLike(true)}
+                />
+
              
 
                 {/* test player here */}
@@ -99,7 +147,7 @@ export default function BasicModal({open, movies, movieIndex, handleClose}) {
                 {!recLoading &&
                   <div className='detailedview__posters'>
                      {recommendations?.slice(0,10).map((recommendation,index)=>
-                        (recommendation.backdrop_path && (
+                        (recommendation.backdrop_path  && (
                             <div className='detailedview__container'>
                            
                               

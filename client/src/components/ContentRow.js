@@ -18,6 +18,10 @@ function ContentRow({title, movies}) {
     console.log('movie index set to: ', movieIndex)
   }
   const handleClose = () => setOpen(false);
+  const uniqueMovies = movies.filter((movie, index) => {
+    const currentImage = movie.backdrop_path || movie.poster;
+    return currentImage && movies.findIndex(m => (m.backdrop_path || m.poster) === currentImage) === index;
+  });
  
   console.log("movies for content row are: ", movies)
   function showMoreInfo(){
@@ -29,10 +33,11 @@ function ContentRow({title, movies}) {
         <h2>{title}</h2>
         <div className='row__posters'>
         <BasicModal open={open} movies={movies} movieIndex = {movieIndex} handleClose={handleClose}/>
+       
 
         {movies.map((movie,index)=>
-            (movie.backdrop_path && (
-            <img className= 'row__poster'  onClick={()=>handleOpen(index)} key = {movie.id} src={`${imgUrl}${movie?.backdrop_path}`} alt = {movie.name}/>
+            ((movie.backdrop_path || movie.poster) && (
+            <img className= 'row__poster'  onClick={()=>handleOpen(index)} key = {movie.id} src={`${imgUrl}${movie.backdrop_path ? movie.backdrop_path : movie?.poster}`} alt = {movie.name}/>
             )
         ))}
         </div>

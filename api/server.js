@@ -10,6 +10,7 @@ import jwt from 'jsonwebtoken'
 
 
 import User from './models/usermodel.js'
+import MovieRoutes from './routes/movielistRoutes.js'
 
 
 
@@ -20,6 +21,8 @@ const app = express()
 
 app.use(cors())
 app.use(bodyParser.json())
+app.use("/movie-list", MovieRoutes)
+
 await connect()
 app.get('/movie/popular', async (req, res) => {
     try {

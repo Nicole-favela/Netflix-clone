@@ -87,7 +87,9 @@ function SignIn({signup}) {
            dispatch(login({
             email: user.email,
             password: user.password,
-            loggedIn: true
+            loggedIn: true,
+            user_id: user._id,
+
           
           }));
            navigate('/') //show home page
