@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import Box from '@mui/material/Box';
 
 import Typography from '@mui/material/Typography';
@@ -30,6 +31,7 @@ export default function BasicModal({open, movies, movieIndex, handleClose}) {
     const user = useSelector(selectUser)
     const [like, setLike] = useState(false)
     const movieSeed =movies[movieIndex]?.id
+    console.log("the movie seed is: ", movieSeed, 'with title: ',movies[movieIndex]?.title)
     //const [movieListItem, setMovieListItem] = useState(null)
     const recommendationsUrl = `http://localhost:3001/movie/recommendations?movie_id=${movieSeed}`
     const {data: recommendations,loading: recLoading ,error: recError} = useRecommendations(recommendationsUrl)
@@ -38,13 +40,16 @@ export default function BasicModal({open, movies, movieIndex, handleClose}) {
         console.log("error loading recommendations in modal")
     }
     if(!recLoading){
-        console.log("movie recs are: ", recommendations)
+        console.log("In detailed view movie recs are: ", recommendations)
     }
     function truncateDescription(string, cutoffChar){
         console.log("string overview is: ", string)
         return string?.length > cutoffChar ? string.substr(0, cutoffChar -1) + '...' : string;
     
         }
+    // useEffect(()=>{
+
+    // },)
     async function addToList(movie){
         // rating: Number, user generated
         // title: String,
@@ -57,6 +62,7 @@ export default function BasicModal({open, movies, movieIndex, handleClose}) {
         console.log('you added movie: ', movie, 'to your list!!!!')
         const movie_data = {
             rating: like,
+            id: movie.id,
             title: movie.title,
             overview: movie.overview,
             user_id: user.user_id,
