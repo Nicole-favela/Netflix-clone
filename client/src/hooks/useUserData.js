@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 
-export default function useUserData(url){
+export default function useUserData(url, callback){
     const [data,setData] = useState([])
     const [error,setError] = useState(null)
     const [loading,setLoading] = useState(false)
@@ -17,6 +17,7 @@ export default function useUserData(url){
                     const res = await axios.get(url)
                     console.log('in user data hook: ',res.data.data)
                     setData(res.data.data)
+                    callback(res.data.data)
                 }catch(err){
                     console.error(err)
                     setError(err)
@@ -25,7 +26,7 @@ export default function useUserData(url){
                 }
             }
         )()
-    }, [url]);
+    }, [url, callback]);
    
     return { data, error, loading }
 

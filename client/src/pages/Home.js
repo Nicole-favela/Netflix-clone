@@ -1,17 +1,20 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Nav from '../components/Nav'
 import Banner from '../components/Banner'
 import ContentRow from '../components/ContentRow'
 import useFetch from '../hooks/useFetch'
 import useUserData from '../hooks/useUserData'
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
-import { selectUser } from '../features/userSlice'
-
+import { useSelector, useDispatch } from 'react-redux'
+import { selectMovies, selectUser, addMovie } from '../features/userSlice'
+import axios from 'axios'
 
 
 function Home() {
   const user = useSelector(selectUser)
+  const [update, setUpdate ]= useState(false)
+  const dispatch= useDispatch(selectMovies)
+  const [userMovieList, setUserMovieList] = useState([])
  
   const [horrorMovies, setHorrorMovies] = useState([]);
   const horrorUrl = 'http://localhost:3001/discover/horror'
@@ -27,10 +30,23 @@ function Home() {
   const {data: popularData ,loading: popularLoading ,error: popularError} = useFetch(popularUrl)
   const {data: comedyData ,loading: comedyLoading ,error: comedyError} = useFetch(comedyUrl)
   const {data: scifiData ,loading: scifiLoading ,error: scifiError} = useFetch( scifiUrl)
-  //console.log("horror data in home is: ", horrorData)
-  const {data: movielistdata ,loading: listLoading ,error: listError} = useUserData(mylistUrl)
   
-  //console.log("action data in home is: ", actionData)
+  useEffect(()=>{
+    fetchUserList()
+
+  },[update])
+  async function fetchUserList(){
+    try{
+      //setLoading(true)
+      const res = await axios.get(mylistUrl)
+      console.log('in user data hook: ',res.data.data)
+      setUserMovieList(res.data.data)
+      
+  }catch(err){
+      console.error(err)
+
+  }
+}
   
 
   if(horrorError){
@@ -48,9 +64,7 @@ if(comedyError){
 if(scifiError){
   console.log(scifiError)
 }
-if(listError){
-  console.log('Error loading user movies list: ',listError)
-}
+
   
   
   if (horrorLoading) {
@@ -67,7 +81,7 @@ if(listError){
   // console.log("Action movies in home are: ", actionData)
   // console.log("popular movies in home are: ", popularData)
   // console.log("comedy movies in home are: ", comedyData)
-  console.log("My list data in Home is: : ", movielistdata)
+  //console.log("My list data in Home is: : ", movielistdata)
   return (
     <div className="home">
         <Nav/>
@@ -77,11 +91,13 @@ if(listError){
         <ContentRow
           title="Trending"
           movies= {popularData}
+          fetchUserList={fetchUserList}
         
         />
          <ContentRow
           title="Horror"
           movies= {horrorData}
+          fetchUserList={fetchUserList}
          
           
          
@@ -90,21 +106,25 @@ if(listError){
          <ContentRow
           title="Action"
           movies= {actionData}
+          fetchUserList={fetchUserList}
         
         />
           <ContentRow
           title="Comedies"
           movies= {comedyData}
+          fetchUserList={fetchUserList}
         
         />
           <ContentRow
           title="Scifi"
           movies= {scifiData}
+          fetchUserList={fetchUserList}
         
         />
           <ContentRow
           title="Your List"
-          movies= {movielistdata}
+          movies= {userMovieList}
+          fetchUserList={fetchUserList}
         
         />
 

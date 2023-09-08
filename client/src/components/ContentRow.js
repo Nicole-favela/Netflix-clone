@@ -3,14 +3,14 @@ import './ContentRow.css'
 import axios from 'axios';
 import BasicModal from './DetailedView';
 
-function ContentRow({title, movies}) {
-  //const [movies, setMovies] = useState([])
+function ContentRow({title, movies, fetchUserList}) {
+  
   const imgUrl = 'https://image.tmdb.org/t/p/original/'
   const [movieIndex, setMovieIndex] = useState(0)
 
   //for modal:
   const [open, setOpen] = React.useState(false);
-  //const handleOpen = () => setOpen(true);
+ 
   const handleOpen = (i)=>{
     setOpen(true)
     console.log('the movie index is: ', i)
@@ -18,10 +18,7 @@ function ContentRow({title, movies}) {
     console.log('movie index set to: ', movieIndex)
   }
   const handleClose = () => setOpen(false);
-  const uniqueMovies = movies.filter((movie, index) => {
-    const currentImage = movie.backdrop_path || movie.poster;
-    return currentImage && movies.findIndex(m => (m.backdrop_path || m.poster) === currentImage) === index;
-  });
+ 
  
   console.log("movies for content row are: ", movies)
   function showMoreInfo(){
@@ -32,7 +29,7 @@ function ContentRow({title, movies}) {
         
         <h2>{title}</h2>
         <div className='row__posters'>
-        <BasicModal open={open} movies={movies} movieIndex = {movieIndex} handleClose={handleClose}/>
+        <BasicModal open={open} movies={movies} movieIndex = {movieIndex} handleClose={handleClose} fetchUserList={fetchUserList}/>
        
 
         {movies.map((movie,index)=>

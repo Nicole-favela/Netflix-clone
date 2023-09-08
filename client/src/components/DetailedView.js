@@ -27,7 +27,7 @@ const style = {
  
 };
 
-export default function BasicModal({open, movies, movieIndex, handleClose}) {
+export default function BasicModal({open, movies, movieIndex, handleClose, fetchUserList}) {
     const user = useSelector(selectUser)
     const [like, setLike] = useState(false)
     const movieSeed =movies[movieIndex]?.id
@@ -47,18 +47,9 @@ export default function BasicModal({open, movies, movieIndex, handleClose}) {
         return string?.length > cutoffChar ? string.substr(0, cutoffChar -1) + '...' : string;
     
         }
-    // useEffect(()=>{
-
-    // },)
+  
     async function addToList(movie){
-        // rating: Number, user generated
-        // title: String,
-        // overview: String,
-        // user_id: mongoose.Types.ObjectId, //added to associate user with their transactions
-       
-        // release_date: {type: Date},
-        // poster: String,
-        // createdAt: {type: Date, default: Date.now},
+     
         console.log('you added movie: ', movie, 'to your list!!!!')
         const movie_data = {
             rating: like,
@@ -78,11 +69,12 @@ export default function BasicModal({open, movies, movieIndex, handleClose}) {
               'content-type': "application/json", //makes sure json format is sent to backend
              
             }
-          }); 
-        
+          });
+        if(res.ok){
+          fetchUserList()
          
-    
-
+        }
+     
     }
        
   return (
@@ -156,8 +148,6 @@ export default function BasicModal({open, movies, movieIndex, handleClose}) {
                         (recommendation.backdrop_path  && (
                             <div className='detailedview__container'>
                            
-                              
-                            
                               <img className='detailedview__poster' key = {index} src={`${imgUrl}${recommendation?.backdrop_path}`} alt = {recommendation?.name}/>
                               <h4 className='detailedview__moviename'>{truncateDescription(recommendation?.title, 20)}</h4>
                             </div>
@@ -166,12 +156,8 @@ export default function BasicModal({open, movies, movieIndex, handleClose}) {
                  </div>
 
                 }
-              
-               
-          
+        
         </div>
-            
-
         </div>
         
         </header>
