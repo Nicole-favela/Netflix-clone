@@ -31,19 +31,13 @@ export default function BasicModal({open, movies, movieIndex, handleClose, fetch
     const user = useSelector(selectUser)
     const [like, setLike] = useState(false)
     const movieSeed =movies[movieIndex]?.id
-    console.log("the movie seed is: ", movieSeed, 'with title: ',movies[movieIndex]?.title)
-    //const [movieListItem, setMovieListItem] = useState(null)
+    
     const recommendationsUrl = `http://localhost:3001/movie/recommendations?movie_id=${movieSeed}`
     const {data: recommendations,loading: recLoading ,error: recError} = useRecommendations(recommendationsUrl)
     const imgUrl = 'https://image.tmdb.org/t/p/original/'
-    if(recError){
-        console.log("error loading recommendations in modal")
-    }
-    if(!recLoading){
-        console.log("In detailed view movie recs are: ", recommendations)
-    }
+    
     function truncateDescription(string, cutoffChar){
-        console.log("string overview is: ", string)
+        //console.log("string overview is: ", string)
         return string?.length > cutoffChar ? string.substr(0, cutoffChar -1) + '...' : string;
     
         }
@@ -75,6 +69,20 @@ export default function BasicModal({open, movies, movieIndex, handleClose, fetch
          
         }
      
+    }
+    async function deleteFromList(movie){
+      console.log("the id to delete is: ", )
+      console.log('the movie to delete is: ', movie?._id)
+      const _id =  movie?._id
+      const res = await fetch(`http://localhost:3001/movie-list/${_id}`, {
+        method: "DELETE",
+        
+      });
+      if(res.ok){
+        fetchUserList() //updates and refetches transactions to display on table
+        window.alert("Removed From List")
+      }
+
     }
        
   return (
@@ -119,14 +127,22 @@ export default function BasicModal({open, movies, movieIndex, handleClose, fetch
                     <PlayArrowRoundedIcon className='detailedview__button-icon' fontSize='small' />
                     Play
                 </button>
+                {movies[movieIndex]?.user_id !== undefined ? (
+                   <button className='detailedview__button'  onClick={()=>deleteFromList(movies[movieIndex])}>
+                   Remove
+                    </button>
+                
+                ):
                 <button className='detailedview__button'  onClick={()=>addToList(movies[movieIndex])}>
-                    + My List
-                </button>
+                + My List
+                 </button>
+               
+                
+                }
+               
                
                 <ThumbUpIcon
                     color="inherit" 
-                
-
                     onClick={()=>setLike(true)}
                 />
 

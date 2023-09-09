@@ -15,7 +15,7 @@ function Home() {
   const [update, setUpdate ]= useState(false)
   const dispatch= useDispatch(selectMovies)
   const [userMovieList, setUserMovieList] = useState([])
- 
+  const [loadingUserMovies, setLoadingUserMovies] = useState()
   const [horrorMovies, setHorrorMovies] = useState([]);
   const horrorUrl = 'http://localhost:3001/discover/horror'
   const popularUrl = 'http://localhost:3001/movie/popular'
@@ -37,15 +37,18 @@ function Home() {
   },[update])
   async function fetchUserList(){
     try{
-      //setLoading(true)
+      setLoadingUserMovies(true)
       const res = await axios.get(mylistUrl)
-      console.log('in user data hook: ',res.data.data)
+      console.log('********************** User movie list is: ',res.data.data)
       setUserMovieList(res.data.data)
       
   }catch(err){
       console.error(err)
 
   }
+  finally{
+  setLoadingUserMovies(false)
+}
 }
   
 
@@ -77,56 +80,69 @@ if(scifiError){
     return <div>Loading...</div>;
   }
 
-  // console.log("horror movies in home are: ", horrorData)
-  // console.log("Action movies in home are: ", actionData)
-  // console.log("popular movies in home are: ", popularData)
-  // console.log("comedy movies in home are: ", comedyData)
-  //console.log("My list data in Home is: : ", movielistdata)
   return (
     <div className="home">
         <Nav/>
         <Banner/>
         
-
+      {!popularLoading &&
         <ContentRow
-          title="Trending"
-          movies= {popularData}
-          fetchUserList={fetchUserList}
+        title="Trending"
+        movies= {popularData}
+        fetchUserList={fetchUserList}
+      
+      />
+
+      }
+      {
+        !horrorLoading &&
+        <ContentRow
+        title="Horror"
+        movies= {horrorData}
+        fetchUserList={fetchUserList}
+      
+      />
+      }
         
-        />
-         <ContentRow
-          title="Horror"
-          movies= {horrorData}
-          fetchUserList={fetchUserList}
-         
+        {!actionLoading &&
+            <ContentRow
+            title="Action"
+            movies= {actionData}
+            fetchUserList={fetchUserList}
           
-         
-        
-        />
-         <ContentRow
-          title="Action"
-          movies= {actionData}
-          fetchUserList={fetchUserList}
-        
-        />
-          <ContentRow
-          title="Comedies"
-          movies= {comedyData}
-          fetchUserList={fetchUserList}
-        
-        />
-          <ContentRow
-          title="Scifi"
-          movies= {scifiData}
-          fetchUserList={fetchUserList}
-        
-        />
+          />
+
+        }
+        {
+          !comedyLoading &&
+            <ContentRow
+            title="Comedies"
+            movies= {comedyData}
+            fetchUserList={fetchUserList}
+          
+          />
+        }
+          
+          {!scifiLoading && 
+            <ContentRow
+            title="Scifi"
+            movies= {scifiData}
+            fetchUserList={fetchUserList}
+          
+          />
+
+          }
+        {!loadingUserMovies &&
           <ContentRow
           title="Your List"
           movies= {userMovieList}
           fetchUserList={fetchUserList}
         
         />
+
+
+        }
+         
 
     </div>
   )

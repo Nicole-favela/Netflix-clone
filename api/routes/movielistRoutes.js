@@ -13,6 +13,7 @@ router.get('/:user_id', async (req, res)=>{ //finds movies and sorts in reverse 
         const uniqueMovieDetails = uniqueMovies.map(async (title) => {
             const movie = await Movies.findOne({ title });
             return {
+                _id: movie._id,
                 rating: movie.rating,
                 id: movie.id,
                 title: movie.title,
@@ -30,6 +31,26 @@ router.get('/:user_id', async (req, res)=>{ //finds movies and sorts in reverse 
     catch(err){
         console.error(err);
         res.status(500).json({ error: 'Failed to retrieve movie list data' });
+
+    }
+   
+
+})
+router.delete('/:id', async (req, res)=>{ //finds movies and sorts in reverse order
+    try{
+        //const {_id: _id} = req.params
+        console.log("the id sent is: ",req.params.id)
+        // if (!mongoose.Types.ObjectId.isValid(_id)) 
+        //     return res.status(404).json({ msg: `No movie with id :${_id}` 
+        // });
+        await Movies.findOneAndDelete({_id: req.params.id })
+       // console.log('movie is: ', movie)
+        res.json({message: "deleted item from list"})
+
+    }
+    catch(err){
+        console.error(err);
+        res.status(500).json({ error: 'Failed to delete movie from list' });
 
     }
    
