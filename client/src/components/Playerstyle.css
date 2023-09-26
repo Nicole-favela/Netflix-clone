@@ -1,0 +1,15 @@
+.player-wrapper {
+    position: relative;
+    padding-top: 2px; /* Player ratio: 100 / (1280 / 720) */
+  }
+  
+  .react-player {
+    position: center;
+    top: 0;
+    left: 20px;
+  }
+  p{
+    padding-top: 30px;
+    color: gray;
+    text-align: left;
+  }

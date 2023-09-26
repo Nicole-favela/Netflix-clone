@@ -24,9 +24,9 @@ function Banner() {
         fetchPopular()
     
     },[])
-    console.log('the movies are: ', movie)
+    //console.log('the movies are: ', movie)
   function truncateDescription(string, cutoffChar){
-    console.log("string overview is: ", string)
+    //console.log("string overview is: ", string)
     return string?.length > cutoffChar ? string.substr(0, cutoffChar -1) + '...' : string;
 
     }

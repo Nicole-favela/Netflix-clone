@@ -15,7 +15,7 @@ export default function useUserData(url, callback){
                 try{
                     setLoading(true)
                     const res = await axios.get(url)
-                    console.log('in user data hook: ',res.data.data)
+                    //console.log('in user data hook: ',res.data.data)
                     setData(res.data.data)
                     callback(res.data.data)
                 }catch(err){

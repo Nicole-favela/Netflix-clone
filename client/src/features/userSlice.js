@@ -13,6 +13,9 @@ export const userSlice = createSlice({
   name: 'user',
   initialState:{
     user: null,
+    currentlyPlaying: null,
+    isPlaying: false,
+    trailer: null,
   },
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
@@ -25,18 +28,33 @@ export const userSlice = createSlice({
     },
     addMovie: (state, action) => {
       state.movies.push(action.payload);
-    }
+    },
+    setPlayingMovie: (state, action)=>{
+      state.currentlyPlaying = action.payload;
+      state.isPlaying = true;
+
+    },
+    stopPlayingMovie: (state)=>{
+      state.currentlyPlaying = null;
+      state.isPlaying = false;
+
+    },
+    addTrailerUrl: (state, action) => {
+      state.trailer.push(action.payload);
+    },
   },
 });
 //export our actions
-export const { login, logout, addMovie } = userSlice.actions;
+export const { login, logout, addMovie, setPlayingMovie, stopPlayingMovie, addTrailerUrl } = userSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
 export const selectUser = (state) => state.user.user;
 export const selectMovies = (state) => state.user.movies;
-
+export const selectCurrentlyPlaying = (state) => state.user.currentlyPlaying;
+export const selectIsPlaying = (state) => state.user.isPlaying;
+export const selectTrailer = (state)=> state.user.trailer
 
 
 export default userSlice.reducer;

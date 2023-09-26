@@ -2,8 +2,12 @@ import React, { useEffect, useState } from 'react'
 import './ContentRow.css'
 import axios from 'axios';
 import BasicModal from './DetailedView';
+import { useSelector,useDispatch } from 'react-redux'
+import {stopPlayingMovie, setPlayingMovie, selectCurrentlyPlaying, selectIsPlaying, currentlyPlaying} from '../features/userSlice'
 
 function ContentRow({title, movies, fetchUserList}) {
+  const dispatch = useDispatch()
+  
   
   const imgUrl = 'https://image.tmdb.org/t/p/original/'
   const [movieIndex, setMovieIndex] = useState(0)
@@ -16,11 +20,15 @@ function ContentRow({title, movies, fetchUserList}) {
     console.log('the movie index is: ', i)
     setMovieIndex(i)
     console.log('movie index set to: ', movieIndex)
+   
   }
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    dispatch(stopPlayingMovie())
+  }
  
  
-  console.log("movies for content row are: ", movies)
+  //console.log("movies for content row are: ", movies)
   function showMoreInfo(){
     return
   }

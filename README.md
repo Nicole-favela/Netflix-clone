@@ -7,7 +7,8 @@ Built with tmbd api, MUI components, react redux, and JWT authentication.
 - User authentication
 -  Intuitive Netflix like movie layout by popularity & genre
 - Profile page
-- Ability to add movies to your list
+- Ability to add or remove movies from your list
+- Youtube video player to watch trailers and clips
 
 
 

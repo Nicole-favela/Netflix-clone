@@ -35,10 +35,24 @@ app.get('/movie/popular', async (req, res) => {
       res.status(500).json({ error: 'Error fetching movies data' });
     }
   });
+  app.get('/movie/trailers', async (req, res) => {
+    try {
+      const movie_id = req.query.movie_id
+      //console.log('the movie id for trailers is: ', movie_id)
+      const response = await fetch(`https://api.themoviedb.org/3/movie/${movie_id}/videos?api_key=${API_KEY}`);
+      const data = await response.json();
+      console.log('the movie data from trailers is :', data)
+  
+      res.json(data);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Error fetching movie trailers' });
+    }
+  });
   app.get('/movie/recommendations', async (req, res) => {
     try {
       const movie_id = req.query.movie_id;
-      console.log("movie id is: ", movie_id)
+      //console.log("movie id is: ", movie_id)
       const response = await fetch(`https://api.themoviedb.org/3/movie/${movie_id}/recommendations?api_key=${API_KEY}`);
       const data = await response.json();
   
@@ -50,7 +64,7 @@ app.get('/movie/popular', async (req, res) => {
   });
   app.get('/discover/horror', async (req, res) => {
     try {
-      const response = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=release_date.desc&page=1&with_genres=27`);
+      const response = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&page=1&with_genres=27`);
       const data = await response.json();
   
       res.json(data);
