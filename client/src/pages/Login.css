@@ -7,9 +7,11 @@
 .login__logo{
     position:fixed;
     left: 0;
-    width: 150px;
+    width: 130px;
     object-fit: contain;
     padding-left: 20px;
+    background-image: none;
+   
 }
 
 

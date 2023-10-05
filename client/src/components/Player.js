@@ -8,10 +8,11 @@ import axios from 'axios'
 import './Playerstyle.css'
 
 
-function Player({movieId, setMovieId}) {
-    
+function Player({movieId, setOpen, setMovieId}) {
+    const [isOpen, setIsOpen] = useState(true)
     const currentlyPlaying = useSelector(selectCurrentlyPlaying) //gets movie id of latest playing movie
     console.log('in player, currently playing is: ', currentlyPlaying)
+    console.log('in player, setOpenis: ',setOpen)
     
     //const {data: videoData ,loading: videoInfoLoading ,error: videoError} = useFetch(videosUrl)
     const [loading, setLoading]= useState(true)
@@ -24,8 +25,16 @@ function Player({movieId, setMovieId}) {
         fetchVideoData();
         console.log('data has loaded in player and is: ', data)
         console.log('the movie id is: ', movieId)
+        //setMovieId(movieId)
      
-    },[movieId]) 
+    },[movieId, link]) 
+    useEffect(()=>{
+        const closeVid = e=>{
+            setOpen(false)
+        }
+        document.body.addEventListener( 'click',closeVid)
+        return ()=> document.body.removeEventListener('click', closeVid)
+    }, [])
    
     //setLink(setYoutubeLink(data))
    
@@ -53,10 +62,11 @@ function Player({movieId, setMovieId}) {
     
     //const link = setYoutubeLink(key)
     function getTrailerKey(res){
+        console.log('in get trailer key the res is: ', res)
         if (res.length < 1){
             return null
         }
-        const filtered_by_type = res.filter(res=> res.type === ('Trailer' ||'Clip'))
+        const filtered_by_type = res.filter(res=> res.type === 'Featurette' || res.type === 'Clip' || res.type === 'Trailer')
         console.log('the filtered keys are: ', filtered_by_type)
         const minIndex = 0
         const maxIndex = filtered_by_type.length 
@@ -81,10 +91,11 @@ function Player({movieId, setMovieId}) {
   return (
     <>
     {(link !== '') ? (
-    <div className='player-wrapper'>
+       
+    <div className='player-wrapper' >
         <ReactPlayer
             playing
-            loop
+            // loop
             controls={true}
             volume={1}
             url={link}

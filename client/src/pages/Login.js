@@ -2,7 +2,8 @@ import React, {useState} from 'react'
 import './Login.css'
 import Button from '@mui/material/Button';
 import netflixbackground from '../assets/Netlfix_dummy_banner.webp'
-import netflixlogo from '../assets/Netflix-logo-on-transparent-background.png'
+//import netflixlogo from '../assets/Netflix-logo-on-transparent-background.png'
+import netflixlogo from '../assets/netflix_transparent.png'
 import SignIn from './SignIn';
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
@@ -19,13 +20,6 @@ function Login() {
     e.preventDefault(); 
      
     try {
-      // Send a POST request to the backend API for user registration
-      // const response = await axios.post('http://localhost:3001/api/register', {
-      //   email,
-      //   password,
-      // });
-      
-      // console.log(response.data.message);
       const form = {
         email,
         password,

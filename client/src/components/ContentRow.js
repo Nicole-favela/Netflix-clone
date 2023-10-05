@@ -7,19 +7,22 @@ import {stopPlayingMovie, setPlayingMovie, selectCurrentlyPlaying, selectIsPlayi
 
 function ContentRow({title, movies, fetchUserList}) {
   const dispatch = useDispatch()
+  const currentlyPlaying = useSelector(selectCurrentlyPlaying) //gets movie id of latest playing movie
   
   
   const imgUrl = 'https://image.tmdb.org/t/p/original/'
+  
   const [movieIndex, setMovieIndex] = useState(0)
 
   //for modal:
   const [open, setOpen] = React.useState(false);
  
-  const handleOpen = (i)=>{
+  const handleOpen = (i, movie)=>{
     setOpen(true)
     console.log('the movie index is: ', i)
     setMovieIndex(i)
     console.log('movie index set to: ', movieIndex)
+    //dispatch(setPlayingMovie(movie[i]?.id))
    
   }
   const handleClose = () => {
@@ -42,7 +45,7 @@ function ContentRow({title, movies, fetchUserList}) {
 
         {movies.map((movie,index)=>
             ((movie.backdrop_path || movie.poster) && (
-            <img className= 'row__poster'  onClick={()=>handleOpen(index)} key = {movie.id} src={`${imgUrl}${movie.backdrop_path ? movie.backdrop_path : movie?.poster}`} alt = {movie.name}/>
+            <img className= 'row__poster'  onClick={()=>handleOpen(index, movie)} key = {movie.id} src={`${imgUrl}${movie.backdrop_path ? movie.backdrop_path : movie?.poster}`} alt = {movie.name}/>
             )
         ))}
         </div>

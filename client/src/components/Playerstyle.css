@@ -1,5 +1,5 @@
 .player-wrapper {
-    position: relative;
+    position: absolute;
     padding-top: 2px; /* Player ratio: 100 / (1280 / 720) */
   }
   

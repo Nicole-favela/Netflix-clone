@@ -50,7 +50,7 @@ function Home() {
     
     fetchUserList()
 
-  },[isPlaying])
+  },[])
   async function fetchUserList(){
     try{
       setLoadingUserMovies(true)
@@ -63,7 +63,7 @@ function Home() {
 
   }
   finally{
-  setLoadingUserMovies(false)
+       setLoadingUserMovies(false)
 }
 }
   

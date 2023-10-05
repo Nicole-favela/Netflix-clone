@@ -14,6 +14,7 @@ import { selectUser, setPlayingMovie, selectCurrentlyPlaying, selectIsPlaying, c
 import { useState, useEffect } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import useFetch from '../hooks/useFetch';
+import VideoPlayer from './VideoPlayer';
 
 
 const style = {
@@ -29,23 +30,10 @@ const style = {
 
  
 };
-const playerstyle = {
-  position: 'relative',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '100%',
-  height: '50%',
-  bgcolor: '#000000',
-//   border: '4px solid #FF0D86',
-  boxShadow: 100,
-  p: 4,
-
- 
-};
 
 
-export default function BasicModal({open, movies, movieIndex, handleClose, fetchUserList}) {
+
+ export default function BasicModal({open, movies, movieIndex, handleClose, fetchUserList}) {
     const dispatch = useDispatch()
     const user = useSelector(selectUser)
     
@@ -59,7 +47,7 @@ export default function BasicModal({open, movies, movieIndex, handleClose, fetch
    
     const recommendationsUrl = `http://localhost:3001/movie/recommendations?movie_id=${movieSeed}`
     const {data: recommendations,loading: recLoading ,error: recError} = useRecommendations(recommendationsUrl)
-    const imgUrl = 'https://image.tmdb.org/t/p/original/'
+    const imgUrl = 'https://image.tmdb.org/t/p/original'
     
     
     function truncateDescription(string, cutoffChar){
@@ -96,34 +84,8 @@ export default function BasicModal({open, movies, movieIndex, handleClose, fetch
         }
      
     }
-    function VideoPlayer({title, movieId, openVideoPlayer}){
-      const handleCloseVideoPlayer =()=> setOpenVideoPlayer(false)
-      console.log('in detailedview vid player and movie id is: ', movieId)
-      return(
-        <Modal
-        open={openVideoPlayer}
-        onClose={handleCloseVideoPlayer}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        
-        <Box sx={playerstyle}>
-          <Typography id="modal-modal-title" variant="h4" component="h2" sx={{color: 'white'}}>
-            {title} Trailer
-           
-          </Typography>
-    
-                 <Box sx={{ position: 'absolute', top: 40, right: 40 }}>
-                    <CloseIcon sx={{ color: 'gray' }} onClick={handleCloseVideoPlayer} />
-                </Box>
-              {/* <CloseIcon color='primary' onClick={handleCloseVideoPlayer}/> */}
-             
-               <Player movieId = {movieId} setMovieId={setMovieId}/>
-              
-        </Box>
-      </Modal>
-      )
-    }
+    console.log('the recommendations are: ',recommendations)
+   
     const handlePlay=(selection)=>{
       console.log('in handle play movie id is: ', selection?.id)
       dispatch(setPlayingMovie(selection?.id))
@@ -172,7 +134,7 @@ export default function BasicModal({open, movies, movieIndex, handleClose, fetch
         backgroundImage: `url("https://image.tmdb.org/t/p/original/${movies[movieIndex]?.backdrop_path || movies[movieIndex]?.poster}")`,
         backgroundPosition: "center center"
     }}>
-      {(openVideoPlayer) &&  <VideoPlayer title={movies[movieIndex]?.title || movies[movieIndex]?.original_title} movieId ={movieId} openVideoPlayer={openVideoPlayer}/>  }
+     
         <div className='banner__contents'>
             <h4 className='banner__title'>
                     {movies[movieIndex]?.title ||  movies[movieIndex]?.original_title}
@@ -213,9 +175,10 @@ export default function BasicModal({open, movies, movieIndex, handleClose, fetch
 
             
             </div>
+            {(openVideoPlayer) &&  <VideoPlayer title={movies[movieIndex]?.title || movies[movieIndex]?.original_title} movieId ={movieId} openVideoPlayer={openVideoPlayer} setOpenVideoPlayer={setOpenVideoPlayer} setMovieId={setMovieId}/>  }
 
               {/* more related episode options */}
-        {!openVideoPlayer && (
+        {/* {!openVideoPlayer && ( */}
         <div className='detailedview__description'>
            <h3 className='detailedview__title'>
                 More Like This
@@ -227,8 +190,8 @@ export default function BasicModal({open, movies, movieIndex, handleClose, fetch
                         (recommendation.backdrop_path  && (
                             <div className='detailedview__container'>
                            
-                              <img className='detailedview__poster' key = {index} src={`${imgUrl}${recommendation?.backdrop_path}`} alt = {recommendation?.name}/>
-                              <h4 className='detailedview__moviename'>{truncateDescription(recommendation?.title, 20)}</h4>
+                              <img className='detailedview__poster' key = {index} src={`${imgUrl}${recommendation?.backdrop_path || recommendation?.poster_path}`} alt = {recommendation?.name}/>
+                              <h4 className='detailedview__moviename'>{truncateDescription(recommendation?.title, 15)}</h4>
                             </div>
                         )
                     ))}
@@ -237,7 +200,7 @@ export default function BasicModal({open, movies, movieIndex, handleClose, fetch
                 }
         
         </div>
-        )}
+        {/* )} */}
 
         </div>
         </header>

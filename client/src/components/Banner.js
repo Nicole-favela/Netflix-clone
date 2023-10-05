@@ -5,9 +5,13 @@ import axios from "axios";
 import url from '../constant.js'
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
 import { CardMedia } from '@mui/material';
+import VideoPlayer from './VideoPlayer';
 
 function Banner() {
     const [movie, setMovie] = useState([])
+    const [openVideoPlayer, setOpenVideoPlayer] = useState(false)
+    const [movieId, setMovieId] = useState(0)
+    
     const fetchPopular = async () => {
         try {
           const res = await axios.get('http://localhost:3001/movie/popular');
@@ -30,6 +34,16 @@ function Banner() {
     return string?.length > cutoffChar ? string.substr(0, cutoffChar -1) + '...' : string;
 
     }
+    const handlePlay=(selection)=>{
+      console.log('in banner movie id is: ', selection?.id)
+      //dispatch(setPlayingMovie(selection?.id))
+      setMovieId(selection?.id)
+      console.log('we are setting the vide player to true in banner')
+      setOpenVideoPlayer(true)
+      //handleOpenVideoPlayer()
+   
+
+    }
   return (
     <header className='banner' style={{
         backgroundSize: "cover",
@@ -43,7 +57,7 @@ function Banner() {
                 {movie?.title ||  movie?.original_title}
             </h1>
             <div className='banner__buttons'>
-                <button className='banner__button'>
+                <button className='banner__button' onClick={()=>handlePlay(movie)}>
                     <PlayArrowRoundedIcon className='banner__button-icon' fontSize='small' />
                     Play
                 </button>
@@ -59,6 +73,14 @@ function Banner() {
 
                 {/* test player here */}
                 <CardMedia/>
+                {/* {title, movieId, openVideoPlayer, setOpenVideoPlayer, setMovieId}){ */}
+                {(openVideoPlayer) && (
+                    <VideoPlayer title={movie?.title ||  movie?.original_title} movieId = {movieId} openVideoPlayer={openVideoPlayer} setOpenVideoPlayer={setOpenVideoPlayer}  setMovieId={setMovieId}/>
+                  
+                )
+                
+                 
+                }
             </div>
         </div>
 
