@@ -38,16 +38,6 @@ function Home() {
   
   
   useEffect(()=>{
-    // console.log('In home component, currelty playing is: ', currentlyPlaying)
-    // if(!videoInfoLoading){
-    //   console.log('in home component, video data is: ', videoData)
-    //   //dispatch(selectTrailer())
-
-    // }
-    // if(videoError){
-    //   console.log('error getting video data in home!!!!!!!!!!!!!!!!!!!!!!!!')
-    // }
-    
     fetchUserList()
 
   },[])
@@ -99,7 +89,7 @@ if(scifiError){
   return (
     <div className="home">
         <Nav/>
-        <Banner/>
+        <Banner fetchUserList={fetchUserList}/>
         
       {!popularLoading &&
         <ContentRow

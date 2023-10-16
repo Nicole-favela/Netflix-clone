@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
 import useRecommendations from '../hooks/useRecommendations';
+import useCredits from '../hooks/useCredits';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import './DetailedView.css'
 import { useSelector,useDispatch } from 'react-redux'
@@ -31,8 +32,6 @@ const style = {
  
 };
 
-
-
  export default function BasicModal({open, movies, movieIndex, handleClose, fetchUserList}) {
     const dispatch = useDispatch()
     const user = useSelector(selectUser)
@@ -42,12 +41,18 @@ const style = {
     const [like, setLike] = useState(false)
     const [openVideoPlayer, setOpenVideoPlayer] = useState(false)
     const [movieId, setMovieId] = useState(0)
-    const movieSeed =movies[movieIndex]?.id
-    //const handleOpenVideoPlayer =()=> setOpenVideoPlayer(true)
-   
+    const [credits, setCredits] = useState([])
+    const movieSeed =movies[movieIndex]?.id 
     const recommendationsUrl = `http://localhost:3001/movie/recommendations?movie_id=${movieSeed}`
     const {data: recommendations,loading: recLoading ,error: recError} = useRecommendations(recommendationsUrl)
+
+    //get credits for particular movie:
+    const creditsUrl = `http://localhost:3001/movie/credits?movie_id=${movieSeed}`
+    const {data: movieCredits,loading: creditsLoading ,error: creditsError} = useCredits(creditsUrl)
     const imgUrl = 'https://image.tmdb.org/t/p/original'
+    if (creditsLoading || recLoading) {
+      return <div>Loading...</div>;
+    }
     
     
     function truncateDescription(string, cutoffChar){
@@ -55,10 +60,35 @@ const style = {
         return string?.length > cutoffChar ? string.substr(0, cutoffChar -1) + '...' : string;
     
         }
+    
+    // }, [open, movieIndex])
+    function getTop5CastMembers(credits){
+      if(!credits || credits === undefined || credits === []){
+        return ''
+      }
+      console.log('movie credits in top 5: ', credits?.cast)
+      //const topFive = credits.cast.slice(0,5)
+      //recommendations?.slice(0,10).map((recommendation,index)=>
+      const castNames = credits?.cast?.slice(0,3).map((actor)=> actor.name)
+      return castNames?.join(', ')
+      //return " movie credits...."Player
+    }
+    function getProducers(credits){
+      
+      if(!credits || credits === undefined || credits === []){
+        return ''
+      }
+      console.log('movie credits in producers: ', credits?.crew)
+      const topFive = credits?.crew?.filter(res=> res.job === 'Executive Producer' || res.job === 'Director')
+      const names = topFive?.slice(0,3).map((producer)=> producer.name)
+      console.log('movie credits in producers: ', names)
+      return names?.join(', ')
+      //return " movie credits...."
+    }
   
     async function addToList(movie){
      
-        console.log('you added movie: ', movie, 'to your list!!!!')
+        //console.log('you added movie: ', movie, 'to your list!!!!')
         const movie_data = {
             rating: like,
             id: movie.id,
@@ -84,7 +114,7 @@ const style = {
         }
      
     }
-    console.log('the recommendations are: ',recommendations)
+    
    
     const handlePlay=(selection)=>{
       console.log('in handle play movie id is: ', selection?.id)
@@ -143,7 +173,7 @@ const style = {
             {new Date(movies[movieIndex]?.release_date).getFullYear() }
                 <h2 className='banner__description'>
                  
-                  {truncateDescription(movies[movieIndex]?.overview, 150)}
+                  {truncateDescription(movies[movieIndex]?.overview, 200)}
 
                 </h2>
 
@@ -175,18 +205,34 @@ const style = {
 
             
             </div>
+
+            {/* credits: */}
+           
+              {creditsLoading ? (
+              // show a loading indicator while data is being fetched
+              <div className="detailedview__loading">
+                Loading credits...
+              </div>
+            ) : (
+              // render credits when available
+              <div className="detailedview__credits">
+                Cast: {getTop5CastMembers(movieCredits)}
+                <br/>
+                Creators: {getProducers(movieCredits)}
+              </div>
+            )}
             {(openVideoPlayer) &&  <VideoPlayer title={movies[movieIndex]?.title || movies[movieIndex]?.original_title} movieId ={movieId} openVideoPlayer={openVideoPlayer} setOpenVideoPlayer={setOpenVideoPlayer} setMovieId={setMovieId}/>  }
 
               {/* more related episode options */}
         {/* {!openVideoPlayer && ( */}
-        <div className='detailedview__description'>
-           <h3 className='detailedview__title'>
-                More Like This
-                </h3>
-              
-                {!recLoading &&
+        <div className='detailedview__description'>              
+                {(!recLoading && recommendations.length >=1) &&
+                <>
+                  <h3 className='detailedview__title'>
+                  More Like This
+                 </h3>
                   <div className='detailedview__posters'>
-                     {recommendations?.slice(0,10).map((recommendation,index)=>
+                     {recommendations?.slice(0,9).map((recommendation,index)=>
                         (recommendation.backdrop_path  && (
                             <div className='detailedview__container'>
                            
@@ -196,6 +242,7 @@ const style = {
                         )
                     ))}
                  </div>
+                 </>
 
                 }
         

@@ -6,8 +6,13 @@ import url from '../constant.js'
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
 import { CardMedia } from '@mui/material';
 import VideoPlayer from './VideoPlayer';
+import { useSelector,useDispatch } from 'react-redux'
+import { selectUser, currentlyPlaying} from '../features/userSlice'
 
-function Banner() {
+function Banner({fetchUserList}) {
+  const dispatch = useDispatch()
+    const user = useSelector(selectUser)
+    const [like, setLike] = useState(false)
     const [movie, setMovie] = useState([])
     const [openVideoPlayer, setOpenVideoPlayer] = useState(false)
     const [movieId, setMovieId] = useState(0)
@@ -28,9 +33,36 @@ function Banner() {
         fetchPopular()
     
     },[])
+    async function addToList(movie){
+     
+      console.log('you added movie: ', movie, 'to your list!!!!')
+      const movie_data = {
+          rating: like,
+          id: movie.id,
+          title: movie.title,
+          overview: movie.overview,
+          user_id: user.user_id,
+          release_date: movie.release_date,
+          poster: movie?.backdrop_path,
+      
+
+      }
+      const res = await fetch("http://localhost:3001/movie-list", {
+          method:"POST", //creates transaction
+          body: JSON.stringify(movie_data),
+          headers:{
+            'content-type': "application/json", //makes sure json format is sent to backend
+           
+          }
+        });
+      if(res.ok){
+        fetchUserList()
+       
+      }
+   
+  }
     //console.log('the movies are: ', movie)
   function truncateDescription(string, cutoffChar){
-    //console.log("string overview is: ", string)
     return string?.length > cutoffChar ? string.substr(0, cutoffChar -1) + '...' : string;
 
     }
@@ -61,12 +93,12 @@ function Banner() {
                     <PlayArrowRoundedIcon className='banner__button-icon' fontSize='small' />
                     Play
                 </button>
-                <button className='banner__button'>
+                <button className='banner__button' onClick={()=>addToList(movie)}>
                     + My List
                 </button>
                 <h1 className='banner__description'>
                     {/* cuts movie description to 150 characters  */}
-                    {truncateDescription(movie?.overview, 150)}
+                    {truncateDescription(movie?.overview, 190)}
                 
                 
                 </h1>

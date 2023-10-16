@@ -62,6 +62,19 @@ app.get('/movie/popular', async (req, res) => {
       res.status(500).json({ error: 'Error fetching movie recommendations' });
     }
   });
+  app.get('/movie/credits', async (req, res) => {
+    try {
+      const movie_id = req.query.movie_id;
+      const response = await fetch(`https://api.themoviedb.org/3/movie/${movie_id}/credits?api_key=${API_KEY}`);
+      const data = await response.json();
+      //console.log('the data is: ', data)
+  
+      res.json(data);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Error fetching credits' });
+    }
+  });
   app.get('/discover/horror', async (req, res) => {
     try {
       const response = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&page=1&with_genres=27`);

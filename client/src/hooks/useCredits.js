@@ -1,8 +1,7 @@
+
 import { useState, useEffect } from "react";
 import axios from "axios";
-
-
-export default function useRecommendations(url){
+export default function useCredits(url){
     const [data,setData] = useState([])
     const [error,setError] = useState(null)
     const [loading,setLoading] = useState(false)
@@ -15,7 +14,7 @@ export default function useRecommendations(url){
                     setLoading(true)
                     const response = await axios.get(url)
                     //console.log('response is: ', response)
-                    setData(response.data.results)
+                    setData(response.data)
                 }catch(err){
                     setError(err)
                 }finally{

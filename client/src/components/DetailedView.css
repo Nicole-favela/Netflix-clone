@@ -57,6 +57,7 @@
     object-fit: contain;
     color: white; */
     padding: 5px;
+    padding-bottom: 10px;
     
     justify-content: center;
 
@@ -75,9 +76,9 @@
 }
 .detailedview__container{
     position: relative;
-text-align: center;
-color: white;
-padding: 3px;
+    text-align: center;
+    color: white;
+    padding: 2px;
 
 }
 .detailedview__poster {
@@ -140,5 +141,17 @@ left: 50%;
     line-height: 1.3;
     padding-top: 1rem;
     font-size:  0.8rem; */
+
+}
+.detailedview__credits{
+    width: 45rem;
+    line-height: 1.0;
+    padding-top: 1rem;
+    font-size:  0.8rem;
+    max-width: 350px;
+    height: 10px;
+    padding-left: 220px;
+    font-weight: 500;
+    
 
 }
