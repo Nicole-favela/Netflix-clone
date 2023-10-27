@@ -13,6 +13,7 @@ function Player({movieId, setOpen, setMovieId}) {
     const currentlyPlaying = useSelector(selectCurrentlyPlaying) //gets movie id of latest playing movie
     console.log('in player, currently playing is: ', currentlyPlaying)
     console.log('in player, setOpenis: ',setOpen)
+    console.log('in player, movieId is: ',movieId)
     
     //const {data: videoData ,loading: videoInfoLoading ,error: videoError} = useFetch(videosUrl)
     const [loading, setLoading]= useState(true)
@@ -21,13 +22,9 @@ function Player({movieId, setOpen, setMovieId}) {
     let youtubeLink = ''
    
     useEffect(()=>{
-       
         fetchVideoData();
-        console.log('data has loaded in player and is: ', data)
-        console.log('the movie id is: ', movieId)
-        //setMovieId(movieId)
-     
     },[movieId, link]) 
+    //allows you to close out video by clicking outside pop up
     useEffect(()=>{
         const closeVid = e=>{
             setOpen(false)
@@ -36,17 +33,16 @@ function Player({movieId, setOpen, setMovieId}) {
         return ()=> document.body.removeEventListener('click', closeVid)
     }, [])
    
-    //setLink(setYoutubeLink(data))
-   
     async function fetchVideoData(){
            
         try{
             const videosUrl = `http://localhost:3001/movie/trailers?movie_id=${movieId}`
             setLoading(true)
             const response = await axios.get(videosUrl)
-            console.log('response is: ', response)
+            console.log('In player response is: ', response)
             setData(response.data.results)
             const youtubeLink = setYoutubeLink(response.data.results);
+            console.log('In player YOUTUBE LINK Is: ', youtubeLink)
             setLink(youtubeLink);
             
         }catch(err){
@@ -60,34 +56,29 @@ function Player({movieId, setOpen, setMovieId}) {
     
     
     
-    //const link = setYoutubeLink(key)
+    //get trailer key for use in youtube link
     function getTrailerKey(res){
-        console.log('in get trailer key the res is: ', res)
+       
         if (res.length < 1){
             return null
         }
         const filtered_by_type = res.filter(res=> res.type === 'Featurette' || res.type === 'Clip' || res.type === 'Trailer')
-        console.log('the filtered keys are: ', filtered_by_type)
+        
         const minIndex = 0
         const maxIndex = filtered_by_type.length 
-        //return filtered_by_type[0]?.key
+        
         const randomSelection = Math.floor(Math.random() * (maxIndex - minIndex) + minIndex)
-        console.log('the random selection is: ', randomSelection)
+        console.log('the key is: ', filtered_by_type[randomSelection]?.key)
         return filtered_by_type[randomSelection]?.key
     }
     function setYoutubeLink(res){
         const key = getTrailerKey(res)
         const youtubeLink = key ? `https://www.youtube.com/watch?v=${key}` : '';
-        console.log('the link is: ', youtubeLink)
+       
         return youtubeLink;
 
     }
-    console.log('data is set!!!!')
-    console.log(data)
-    console.log(link)
-    
-  
-
+   
   return (
     <>
     {(link !== '') ? (

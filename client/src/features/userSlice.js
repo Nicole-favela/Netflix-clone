@@ -14,6 +14,7 @@ export const userSlice = createSlice({
   initialState:{
     user: null,
     currentlyPlaying: null,
+    recentlyPlayed: [], //stores recently played movie data
     isPlaying: false,
     trailer: null,
   },
@@ -39,13 +40,18 @@ export const userSlice = createSlice({
       state.isPlaying = false;
 
     },
+    setRecentlyPlayedMovie: (state, action)=>{
+      state.recentlyPlayed = state.recentlyPlayed.concat(action.payload); //concatenate new payload to array
+      
+
+    },
     addTrailerUrl: (state, action) => {
       state.trailer.push(action.payload);
     },
   },
 });
 //export our actions
-export const { login, logout, addMovie, setPlayingMovie, stopPlayingMovie, addTrailerUrl } = userSlice.actions;
+export const { login, logout, addMovie, setPlayingMovie, stopPlayingMovie, addTrailerUrl, setRecentlyPlayedMovie } = userSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
@@ -55,6 +61,7 @@ export const selectMovies = (state) => state.user.movies;
 export const selectCurrentlyPlaying = (state) => state.user.currentlyPlaying;
 export const selectIsPlaying = (state) => state.user.isPlaying;
 export const selectTrailer = (state)=> state.user.trailer
+export const selectRecentlyPlayed = (state)=> state.user.recentlyPlayed
 
 
 export default userSlice.reducer;

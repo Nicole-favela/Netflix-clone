@@ -35,7 +35,7 @@ function Banner({fetchUserList}) {
     },[])
     async function addToList(movie){
      
-      console.log('you added movie: ', movie, 'to your list!!!!')
+      //console.log('you added movie: ', movie, 'to your list!!!!')
       const movie_data = {
           rating: like,
           id: movie.id,
@@ -67,10 +67,10 @@ function Banner({fetchUserList}) {
 
     }
     const handlePlay=(selection)=>{
-      console.log('in banner movie id is: ', selection?.id)
+      //console.log('in banner movie id is: ', selection?.id)
       //dispatch(setPlayingMovie(selection?.id))
       setMovieId(selection?.id)
-      console.log('we are setting the vide player to true in banner')
+      //console.log('we are setting the vide player to true in banner')
       setOpenVideoPlayer(true)
       //handleOpenVideoPlayer()
    

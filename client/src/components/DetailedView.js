@@ -11,7 +11,7 @@ import useCredits from '../hooks/useCredits';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import './DetailedView.css'
 import { useSelector,useDispatch } from 'react-redux'
-import { selectUser, setPlayingMovie, selectCurrentlyPlaying, selectIsPlaying, currentlyPlaying} from '../features/userSlice'
+import { selectUser, setPlayingMovie, selectCurrentlyPlaying, selectIsPlaying, setRecentlyPlayedMovie, selectRecentlyPlayed} from '../features/userSlice'
 import { useState, useEffect } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import useFetch from '../hooks/useFetch';
@@ -32,13 +32,17 @@ const style = {
  
 };
 
- export default function BasicModal({open, movies, movieIndex, handleClose, fetchUserList}) {
+ export default function BasicModal({open, movies, movieIndex, handleClose, fetchUserList, fetchPlayedList}) {
     const dispatch = useDispatch()
     const user = useSelector(selectUser)
+    const playing = useSelector(selectIsPlaying)
     
-    const currentlyPlaying = useSelector(selectCurrentlyPlaying) //gets movie id of latest playing movie
-   
+    //const currentlyPlaying = useSelector(selectCurrentlyPlaying) //gets movie id of latest playing movie
+    //const recentlyPlayed = useSelector(selectRecentlyPlayed)
     const [like, setLike] = useState(false)
+    //const [shouldFetchPlayed, setShouldFetchPlayed] = useState(false)
+    const [onlist, setOnList] = useState(false)
+    const [recentlyPlayed, setRecentlyPlayed] = useState(false)
     const [openVideoPlayer, setOpenVideoPlayer] = useState(false)
     const [movieId, setMovieId] = useState(0)
     const [credits, setCredits] = useState([])
@@ -54,42 +58,38 @@ const style = {
       return <div>Loading...</div>;
     }
     
-    
     function truncateDescription(string, cutoffChar){
-        //console.log("string overview is: ", string)
         return string?.length > cutoffChar ? string.substr(0, cutoffChar -1) + '...' : string;
+     }
     
-        }
-    
-    // }, [open, movieIndex])
+   
     function getTop5CastMembers(credits){
       if(!credits || credits === undefined || credits === []){
         return ''
       }
-      console.log('movie credits in top 5: ', credits?.cast)
-      //const topFive = credits.cast.slice(0,5)
-      //recommendations?.slice(0,10).map((recommendation,index)=>
+     
       const castNames = credits?.cast?.slice(0,3).map((actor)=> actor.name)
       return castNames?.join(', ')
-      //return " movie credits...."Player
     }
     function getProducers(credits){
       
       if(!credits || credits === undefined || credits === []){
         return ''
       }
-      console.log('movie credits in producers: ', credits?.crew)
+      //console.log('movie credits in producers: ', credits?.crew)
       const topFive = credits?.crew?.filter(res=> res.job === 'Executive Producer' || res.job === 'Director')
       const names = topFive?.slice(0,3).map((producer)=> producer.name)
-      console.log('movie credits in producers: ', names)
+      
       return names?.join(', ')
-      //return " movie credits...."
     }
   
     async function addToList(movie){
+        setOnList(true) 
      
         //console.log('you added movie: ', movie, 'to your list!!!!')
         const movie_data = {
+            played: recentlyPlayed,
+            on_my_list: true,
             rating: like,
             id: movie.id,
             title: movie.title,
@@ -110,19 +110,51 @@ const style = {
           });
         if(res.ok){
           fetchUserList()
+          //fetchPlayedList()
          
         }
      
     }
     
-   
-    const handlePlay=(selection)=>{
-      console.log('in handle play movie id is: ', selection?.id)
-      dispatch(setPlayingMovie(selection?.id))
-      setMovieId(selection?.id)
+    async function addToPlayedList(movie){
+      console.log('in add to played list function movie is: ', movie)
+      dispatch(setPlayingMovie(movie?.id))
+     
+      
+      setMovieId(movie?.id)
       setOpenVideoPlayer(true)
-      //handleOpenVideoPlayer()
+      //add movie to recently played list
+      setRecentlyPlayed(true)
+     
    
+      
+      console.log('in detailedview, add to play function, recentlyPlayed is ',recentlyPlayed)
+      const movie_data = {
+        played: true,
+        on_my_list: onlist,
+        rating: like,
+        id: movie.id,
+        title: movie.title,
+        overview: movie.overview,
+        user_id: user.user_id,
+        release_date: movie.release_date,
+        poster: movie?.backdrop_path,
+    
+
+    }
+    const res = await fetch("http://localhost:3001/movie-list/recently-watched", {
+        method:"POST", //creates movie
+        body: JSON.stringify(movie_data),
+        headers:{
+          'content-type': "application/json", //makes sure json format is sent to backend
+         
+        }
+      });
+    if(res.ok){
+      //fetchPlayedList()
+   
+    }
+    
 
     }
     async function deleteFromList(movie){
@@ -180,11 +212,11 @@ const style = {
             </div>
 
             <div className='banner__buttons'>
-                <button className='detailedview__button'  onClick={()=>handlePlay(movies[movieIndex])}>
+                <button className='detailedview__button'  onClick={()=> addToPlayedList(movies[movieIndex])}>
                     <PlayArrowRoundedIcon className='detailedview__button-icon' fontSize='small' />
                     Play
                 </button>
-                {movies[movieIndex]?.user_id !== undefined ? (
+                {movies[movieIndex]?.on_my_list ===true ? (
                    <button className='detailedview__button'  onClick={()=>deleteFromList(movies[movieIndex])}>
                    Remove
                     </button>
@@ -221,12 +253,12 @@ const style = {
                 Creators: {getProducers(movieCredits)}
               </div>
             )}
-            {(openVideoPlayer) &&  <VideoPlayer title={movies[movieIndex]?.title || movies[movieIndex]?.original_title} movieId ={movieId} openVideoPlayer={openVideoPlayer} setOpenVideoPlayer={setOpenVideoPlayer} setMovieId={setMovieId}/>  }
+            {(openVideoPlayer) &&  <VideoPlayer title={movies[movieIndex]?.title || movies[movieIndex]?.original_title} movieId ={movieId} openVideoPlayer={openVideoPlayer} setOpenVideoPlayer={setOpenVideoPlayer} setMovieId={setMovieId} />  }
 
               {/* more related episode options */}
         {/* {!openVideoPlayer && ( */}
         <div className='detailedview__description'>              
-                {(!recLoading && recommendations.length >=1) &&
+                {(!recLoading && (recommendations?.length >=1 || recommendations !== undefined) ) &&
                 <>
                   <h3 className='detailedview__title'>
                   More Like This

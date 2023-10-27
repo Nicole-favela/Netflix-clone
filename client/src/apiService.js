@@ -6,7 +6,7 @@ import { useState } from "react";
  //const API_KEY = useKey()
 async function fetchData({endpoint, apiKey}) {
     // const [movies, setMovies] = useState([])
-    console.log("in fetchdata api key is: ",apiKey)
+    //console.log("in fetchdata api key is: ",apiKey)
     
     try {
         //const res = await axios.get('http://localhost:3001/movie/popular');

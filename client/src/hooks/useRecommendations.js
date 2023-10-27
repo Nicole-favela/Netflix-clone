@@ -14,7 +14,6 @@ export default function useRecommendations(url){
                 try{
                     setLoading(true)
                     const response = await axios.get(url)
-                    //console.log('response is: ', response)
                     setData(response.data.results)
                 }catch(err){
                     setError(err)

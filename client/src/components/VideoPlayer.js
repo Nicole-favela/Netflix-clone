@@ -21,7 +21,10 @@ const playerstyle = {
   };
   
 export default function VideoPlayer({title, movieId, openVideoPlayer, setOpenVideoPlayer, setMovieId}){
-    const handleCloseVideoPlayer =()=> setOpenVideoPlayer(false)
+    const handleCloseVideoPlayer =()=>{ 
+      setOpenVideoPlayer(false)
+      //setShouldFetchPlayed(true)
+    }
     const [open, setOpen] = useState(false)
     console.log('in vid player and movie id is: ', movieId)
     console.log('in vid player openVideoPlayer is: ',openVideoPlayer)
