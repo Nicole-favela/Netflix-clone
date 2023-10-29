@@ -24,10 +24,11 @@
 
 }
 .profile__details > h2{
-    background-color: grey;
-    padding: 15px;
+    background-color: rgb(38, 37, 37);
+    padding: 10px;
     font-size: 15px;
     padding-left: 20px;
+    margin-bottom: 5px;
 
 }
 .profile__body > h1{
