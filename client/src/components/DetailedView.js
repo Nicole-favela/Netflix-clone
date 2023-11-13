@@ -16,6 +16,8 @@ import { useState, useEffect } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import useFetch from '../hooks/useFetch';
 import VideoPlayer from './VideoPlayer';
+import Cookies from 'js-cookie';
+import {jwtDecode} from 'jwt-decode'
 
 
 const style = {
@@ -35,10 +37,11 @@ const style = {
  export default function BasicModal({open, movies, movieIndex, handleClose, fetchUserList, fetchPlayedList}) {
     const dispatch = useDispatch()
     const user = useSelector(selectUser)
+    const token = Cookies.get('token')
+    const decoded = jwtDecode(token)
+    const user_id = decoded._id
     const playing = useSelector(selectIsPlaying)
     
-    //const currentlyPlaying = useSelector(selectCurrentlyPlaying) //gets movie id of latest playing movie
-    //const recentlyPlayed = useSelector(selectRecentlyPlayed)
     const [like, setLike] = useState(false)
     //const [shouldFetchPlayed, setShouldFetchPlayed] = useState(false)
     const [onlist, setOnList] = useState(false)
@@ -47,11 +50,11 @@ const style = {
     const [movieId, setMovieId] = useState(0)
     const [credits, setCredits] = useState([])
     const movieSeed =movies[movieIndex]?.id 
-    const recommendationsUrl = `http://localhost:3001/movie/recommendations?movie_id=${movieSeed}`
+    const recommendationsUrl = `http://localhost:3001/content/movie/recommendations?movie_id=${movieSeed}`
     const {data: recommendations,loading: recLoading ,error: recError} = useRecommendations(recommendationsUrl)
 
     //get credits for particular movie:
-    const creditsUrl = `http://localhost:3001/movie/credits?movie_id=${movieSeed}`
+    const creditsUrl = `http://localhost:3001/content/movie/credits?movie_id=${movieSeed}`
     const {data: movieCredits,loading: creditsLoading ,error: creditsError} = useCredits(creditsUrl)
     const imgUrl = 'https://image.tmdb.org/t/p/original'
     if (creditsLoading || recLoading) {
@@ -64,7 +67,7 @@ const style = {
     
    
     function getTop5CastMembers(credits){
-      if(!credits || credits === undefined || credits === []){
+      if(!credits || credits === undefined ){
         return ''
       }
      
@@ -73,7 +76,7 @@ const style = {
     }
     function getProducers(credits){
       
-      if(!credits || credits === undefined || credits === []){
+      if(!credits || credits === undefined ){
         return ''
       }
       //console.log('movie credits in producers: ', credits?.crew)
@@ -85,8 +88,6 @@ const style = {
   
     async function addToList(movie){
         setOnList(true) 
-     
-        //console.log('you added movie: ', movie, 'to your list!!!!')
         const movie_data = {
             played: recentlyPlayed,
             on_my_list: true,
@@ -94,7 +95,7 @@ const style = {
             id: movie.id,
             title: movie.title,
             overview: movie.overview,
-            user_id: user.user_id,
+            user_id: user?.user_id || user_id,
             release_date: movie.release_date,
             poster: movie?.backdrop_path,
         
@@ -105,30 +106,24 @@ const style = {
             body: JSON.stringify(movie_data),
             headers:{
               'content-type': "application/json", //makes sure json format is sent to backend
-             
+              Authorization: `Bearer ${token}`,
             }
           });
         if(res.ok){
-          fetchUserList()
-          //fetchPlayedList()
+          fetchUserList(user_id, token)
+         
          
         }
      
     }
     
     async function addToPlayedList(movie){
-      console.log('in add to played list function movie is: ', movie)
+      console.log('in add to played list function movie is: ', movie, 'and the movie id is: ', movie?.id)
       dispatch(setPlayingMovie(movie?.id))
-     
-      
       setMovieId(movie?.id)
       setOpenVideoPlayer(true)
-      //add movie to recently played list
       setRecentlyPlayed(true)
-     
-   
-      
-      console.log('in detailedview, add to play function, recentlyPlayed is ',recentlyPlayed)
+    
       const movie_data = {
         played: true,
         on_my_list: onlist,
@@ -136,7 +131,7 @@ const style = {
         id: movie.id,
         title: movie.title,
         overview: movie.overview,
-        user_id: user.user_id,
+        user_id: user?.user_id || user_id,
         release_date: movie.release_date,
         poster: movie?.backdrop_path,
     
@@ -147,6 +142,7 @@ const style = {
         body: JSON.stringify(movie_data),
         headers:{
           'content-type': "application/json", //makes sure json format is sent to backend
+          Authorization: `Bearer ${token}`,
          
         }
       });
@@ -154,6 +150,7 @@ const style = {
       //fetchPlayedList()
    
     }
+    
     
 
     }
@@ -166,7 +163,7 @@ const style = {
         
       });
       if(res.ok){
-        fetchUserList() //updates and refetches transactions to display on table
+        fetchUserList(user_id, token) //updates and refetches transactions to display on table
         window.alert("Removed From List")
       }
 

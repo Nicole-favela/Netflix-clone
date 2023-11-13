@@ -14,12 +14,12 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import {useDispatch} from "react-redux"
 import {login, logout} from "../features/userSlice"
-import Cookie from "js-cookie";
+import Cookies from "js-cookie";
 const darkTheme = createTheme({
     palette: {
       mode: 'dark',
     },
-  });
+});
 
   const buttontheme = createTheme({
     palette: {
@@ -39,30 +39,17 @@ function SignIn({signup}) {
   const dispatch = useDispatch()
   
   const navigate = useNavigate()
-    //create new user
-    // const register = (event) => {
-    //     event.preventDefault(); //prevents refresh when entering info
-    //     // const data = new FormData(event.currentTarget);
-    //     // console.log({
-    //     //   email: data.get('email'),
-    //     //   password: data.get('password'),
-    //     // });
-    //   };
+   
     const signIn= async (event) =>{
         event.preventDefault()
 
         try{
-        //get form data 
-        //const data = new FormData(event.currentTarget);
-        // const form = {
-        //   email: data.get('email'),
-        //   password: data.get('password'),
-        // };
+      
         const form = {
           email,
           password,
         }
-        const res = await fetch('http://localhost:3001/api/login',{
+        const res = await fetch('http://localhost:3001/auth/api/login',{
             method:'POST',
             body: JSON.stringify(form),
             headers:{
@@ -77,13 +64,12 @@ function SignIn({signup}) {
           console.log("user is null!")
         }
         console.log("user is: ", user.email)
-
-        //if res is not ok, let user know pw or email was incorrect
        
-      
         if(res.ok){
-           alert('success, redirecting to home page...! user email is: ', user.email)
-           Cookie.set("token", token);
+           //alert('success, redirecting to home page...! user email is: ', user.email)
+           Cookies.set("token", token);
+           //Cookies.remove('token')
+         
            dispatch(login({
             email: user.email,
             password: user.password,
@@ -92,22 +78,19 @@ function SignIn({signup}) {
 
           
           }));
-           navigate('/') //show home page
-          
+          navigate('/') //show home page
         }
+       
       }catch(e){
         alert('the password or email was incorrect, please try again')
-        navigate('/') //show home page
+        navigate('/login') 
       }
-        // else{
-        //   alert('the password or email was incorrect, please try again')
-        //   navigate('/login') //show home page
-        // }
+     
     }
     
   return (
     <div className='signup'>
-          <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={darkTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box

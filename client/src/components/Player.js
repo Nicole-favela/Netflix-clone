@@ -11,11 +11,7 @@ import './Playerstyle.css'
 function Player({movieId, setOpen, setMovieId}) {
     const [isOpen, setIsOpen] = useState(true)
     const currentlyPlaying = useSelector(selectCurrentlyPlaying) //gets movie id of latest playing movie
-    console.log('in player, currently playing is: ', currentlyPlaying)
-    console.log('in player, setOpenis: ',setOpen)
-    console.log('in player, movieId is: ',movieId)
-    
-    //const {data: videoData ,loading: videoInfoLoading ,error: videoError} = useFetch(videosUrl)
+   
     const [loading, setLoading]= useState(true)
     const [data, setData] = useState([])
     const [link, setLink] = useState('')
@@ -36,7 +32,7 @@ function Player({movieId, setOpen, setMovieId}) {
     async function fetchVideoData(){
            
         try{
-            const videosUrl = `http://localhost:3001/movie/trailers?movie_id=${movieId}`
+            const videosUrl = `http://localhost:3001/content/movie/trailers?movie_id=${movieId}`
             setLoading(true)
             const response = await axios.get(videosUrl)
             console.log('In player response is: ', response)
@@ -53,9 +49,6 @@ function Player({movieId, setOpen, setMovieId}) {
         }
     }
    
-    
-    
-    
     //get trailer key for use in youtube link
     function getTrailerKey(res){
        
@@ -68,7 +61,7 @@ function Player({movieId, setOpen, setMovieId}) {
         const maxIndex = filtered_by_type.length 
         
         const randomSelection = Math.floor(Math.random() * (maxIndex - minIndex) + minIndex)
-        console.log('the key is: ', filtered_by_type[randomSelection]?.key)
+       
         return filtered_by_type[randomSelection]?.key
     }
     function setYoutubeLink(res){

@@ -8,10 +8,15 @@ import { CardMedia } from '@mui/material';
 import VideoPlayer from './VideoPlayer';
 import { useSelector,useDispatch } from 'react-redux'
 import { selectUser, currentlyPlaying} from '../features/userSlice'
+import {jwtDecode} from 'jwt-decode'
+import Cookies from 'js-cookie';
 
 function Banner({fetchUserList}) {
   const dispatch = useDispatch()
     const user = useSelector(selectUser)
+    const token = Cookies.get('token')
+    const decoded = jwtDecode(token)
+    const user_id = decoded._id
     const [like, setLike] = useState(false)
     const [movie, setMovie] = useState([])
     const [openVideoPlayer, setOpenVideoPlayer] = useState(false)
@@ -19,7 +24,7 @@ function Banner({fetchUserList}) {
     
     const fetchPopular = async () => {
         try {
-          const res = await axios.get('http://localhost:3001/movie/popular');
+          const res = await axios.get('http://localhost:3001/content/movie/popular');
           // Use res.data to access the response body
           setMovie(res.data.results[Math.floor(Math.random() * res.data.results.length -1)]);
           return res
@@ -41,7 +46,7 @@ function Banner({fetchUserList}) {
           id: movie.id,
           title: movie.title,
           overview: movie.overview,
-          user_id: user.user_id,
+          user_id: user?.user_id || user_id,
           release_date: movie.release_date,
           poster: movie?.backdrop_path,
       
@@ -52,11 +57,12 @@ function Banner({fetchUserList}) {
           body: JSON.stringify(movie_data),
           headers:{
             'content-type': "application/json", //makes sure json format is sent to backend
+            Authorization: `Bearer ${token}`,
            
           }
         });
       if(res.ok){
-        fetchUserList()
+        fetchUserList(user_id, token)
        
       }
    
@@ -67,13 +73,8 @@ function Banner({fetchUserList}) {
 
     }
     const handlePlay=(selection)=>{
-      //console.log('in banner movie id is: ', selection?.id)
-      //dispatch(setPlayingMovie(selection?.id))
       setMovieId(selection?.id)
-      //console.log('we are setting the vide player to true in banner')
       setOpenVideoPlayer(true)
-      //handleOpenVideoPlayer()
-   
 
     }
   return (

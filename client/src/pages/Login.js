@@ -24,7 +24,7 @@ function Login() {
         email,
         password,
       }
-      const res = await fetch('http://localhost:3001/api/register',{
+      const res = await fetch('http://localhost:3001/auth/api/register',{
         method: "POST",
         body: JSON.stringify(form),
         headers: {
@@ -37,7 +37,7 @@ function Login() {
       navigate("/")// go to home page
       setSignIn(true)
     }
-      // You can handle the success message or redirect the user here
+     
     } catch (error) {
       console.error(error);
     }

@@ -1,8 +1,11 @@
 import {Router} from 'express'
 import Movies from '../models/movielistmodel.js'
+import authenticateToken from '../utils/authenticate.js'
+
+
 const router = Router();
 
-router.get('/:user_id', async (req, res)=>{ //finds movies and sorts in reverse order
+router.get('/:user_id',authenticateToken, async (req, res)=>{ //finds movies and sorts in reverse order
     try{
         
         const movie= await Movies.find({ "user_id": req.params.user_id, on_my_list: true }).sort({createdAt: -1})
@@ -26,7 +29,7 @@ router.get('/:user_id', async (req, res)=>{ //finds movies and sorts in reverse 
             };
         });
         const data = await Promise.all(uniqueMovieDetails);
-        console.log('movie is: ', movie)
+        //console.log('movie is: ', movie)
         res.json({data})
         //res.json(movie)
 
@@ -40,12 +43,11 @@ router.get('/:user_id', async (req, res)=>{ //finds movies and sorts in reverse 
 
 })
 //new route for recently played listt
-router.get('/recently-watched/:user_id', async (req, res)=>{ //finds movies and sorts in reverse order
+router.get('/recently-watched/:user_id',authenticateToken, async (req, res)=>{ //finds movies and sorts in reverse order
     try{
         
         const movie= await Movies.find({ "user_id": req.params.user_id, played: true }).sort({createdAt: -1})
-        console.log('the movie that was recently played is: ', movie)
-        console.log('$$$$$$$$$$$$$$ played is: ', movie.played)
+    
 
         const uniqueMovies = await Movies.distinct('title', {
             _id: { $in: movie.map(m => m._id) }
@@ -66,7 +68,7 @@ router.get('/recently-watched/:user_id', async (req, res)=>{ //finds movies and 
             };
         });
         const data = await Promise.all(uniqueMovieDetails);
-       console.log('movie is: ', movie)
+      
         res.json({data})
         //res.json(movie)
 
@@ -98,13 +100,14 @@ router.delete('/:id', async (req, res)=>{ //finds movies and sorts in reverse or
 
 })
 
-router.post('/', async (req,res)=>{
+router.post('/',authenticateToken, async (req,res)=>{
    
-    const { played, on_my_list,rating,id,title,overview,release_date, poster, user_id} = req.body
-  
-    // console.log('the title added to movies list is: ', title)
+   
+   
     
     try {
+        const { played, on_my_list,rating,id,title,overview,release_date, poster, user_id} = req.body
+        console.log('in post req for adding movie to list, user_id is: ', user_id)
         // Check if the movie exists in the database for the user
         const existingMovie = await Movies.findOne({ user_id, title });
     
@@ -128,6 +131,7 @@ router.post('/', async (req,res)=>{
           res.status(201).json({ message: 'Added to my list.' });
         } else { //movie already in db, update necessary fields
         console.log('movie is already in db ', existingMovie)
+          existingMovie.user_id = user_id;
           existingMovie.played = played;
           existingMovie.on_my_list = true;
           existingMovie.rating = rating;
@@ -141,21 +145,17 @@ router.post('/', async (req,res)=>{
       }
    
 });
-router.post('/recently-watched', async (req,res)=>{
+router.post('/recently-watched',authenticateToken, async (req,res)=>{
    
     const { played, on_my_list,rating,id,title,overview,release_date, poster, user_id} = req.body
    
-    // console.log('**************** =played iss: ', played)
-    // console.log('the title added to movies list is: ', title)
     try {
         // Check if the movie exists in the database for the user
         const existingMovie = await Movies.findOne({ user_id, title });
        
     
         if (!existingMovie) {
-            // console.log('movie IS NOT in db ')
-            // console.log('Recently watched movies DOES NOT exist ')
-          // If the movie doesn't exist, create 
+          
           const newMovie = new Movies({
             played,
             on_my_list,
@@ -171,8 +171,7 @@ router.post('/recently-watched', async (req,res)=>{
           await newMovie.save();
           res.status(201).json({ message: 'Movie marked as recently watched.' });
         } else {
-          // If the movie exists, update 
-          console.log('Recently watched movies DOES exist: ', existingMovie)
+       
           existingMovie.played = true;
           existingMovie.on_my_list = on_my_list;
           existingMovie.rating = rating;
