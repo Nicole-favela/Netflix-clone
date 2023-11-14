@@ -79,6 +79,7 @@ fetchData()
         setLoadingUserMovies(true)
         const headers = {'Authorization': `Bearer ${token}`}
         const res = await axios.get(mylistUrl, {headers})
+        console.log('fetch user list isL ', res.data)
         
         setUserMovieList(res.data.data)
        
@@ -97,6 +98,8 @@ async function fetchPlayedList(user_id, token){
     const headers = {'Authorization': `Bearer ${token}`}
     const myPlayedMoviesUrl= `http://localhost:3001/movie-list/recently-watched/${user_id}`
     const res = await axios.get(myPlayedMoviesUrl, {headers})
+    console.log('fetch played list isL ', res.data)
+   
     setPlayedMovie(res.data.data)
     
   }catch(err){
@@ -136,7 +139,7 @@ async function fetchPlayedList(user_id, token){
 
       }
       {/* recently played section: */}
-      {(!loadingPlayedMovies) ? (
+      {(!loadingPlayedMovies && playedMovies.length > 0) ? (
       <ContentRow
         title="Watch It Again"
         movies={playedMovies}
@@ -220,7 +223,7 @@ async function fetchPlayedList(user_id, token){
           />
 
           }
-        {!loadingUserMovies &&
+        {(!loadingUserMovies && userMovieList.length > 0) &&
           <ContentRow
           title="Your List"
           movies= {userMovieList}
