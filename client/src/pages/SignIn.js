@@ -14,6 +14,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import {useDispatch} from "react-redux"
 import {login, logout} from "../features/userSlice"
+import { API_BASE_URL } from '../config/apiUrls';
 import Cookies from "js-cookie";
 const darkTheme = createTheme({
     palette: {
@@ -49,7 +50,7 @@ function SignIn({signup}) {
           email,
           password,
         }
-        const res = await fetch('http://localhost:3001/auth/api/login',{
+        const res = await fetch(`${API_BASE_URL}/auth/api/login`,{
             method:'POST',
             body: JSON.stringify(form),
             headers:{

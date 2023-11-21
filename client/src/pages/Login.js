@@ -7,6 +7,7 @@ import netflixlogo from '../assets/netflix_transparent.png'
 import SignIn from './SignIn';
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../config/apiUrls';
 
 
 //sign up page to create account or sign in
@@ -24,7 +25,7 @@ function Login() {
         email,
         password,
       }
-      const res = await fetch('http://localhost:3001/auth/api/register',{
+      const res = await fetch(`${API_BASE_URL}/auth/api/register`,{
         method: "POST",
         body: JSON.stringify(form),
         headers: {

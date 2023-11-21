@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { selectCurrentlyPlaying } from '../features/userSlice'
 import axios from 'axios'
 import './Playerstyle.css'
+import { API_BASE_URL } from '../config/apiUrls'
 
 
 function Player({movieId, setOpen, setMovieId}) {
@@ -32,7 +33,7 @@ function Player({movieId, setOpen, setMovieId}) {
     async function fetchVideoData(){
            
         try{
-            const videosUrl = `http://localhost:3001/content/movie/trailers?movie_id=${movieId}`
+            const videosUrl = `${API_BASE_URL}/content/movie/trailers?movie_id=${movieId}`
             setLoading(true)
             const response = await axios.get(videosUrl)
             console.log('In player response is: ', response)

@@ -18,6 +18,7 @@ import useFetch from '../hooks/useFetch';
 import VideoPlayer from './VideoPlayer';
 import Cookies from 'js-cookie';
 import {jwtDecode} from 'jwt-decode'
+import { API_BASE_URL } from '../config/apiUrls';
 
 
 const style = {
@@ -50,11 +51,11 @@ const style = {
     const [movieId, setMovieId] = useState(0)
     const [credits, setCredits] = useState([])
     const movieSeed =movies[movieIndex]?.id 
-    const recommendationsUrl = `http://localhost:3001/content/movie/recommendations?movie_id=${movieSeed}`
+    const recommendationsUrl = `${API_BASE_URL}/content/movie/recommendations?movie_id=${movieSeed}`
     const {data: recommendations,loading: recLoading ,error: recError} = useRecommendations(recommendationsUrl)
 
     //get credits for particular movie:
-    const creditsUrl = `http://localhost:3001/content/movie/credits?movie_id=${movieSeed}`
+    const creditsUrl = `${API_BASE_URL}/content/movie/credits?movie_id=${movieSeed}`
     const {data: movieCredits,loading: creditsLoading ,error: creditsError} = useCredits(creditsUrl)
     const imgUrl = 'https://image.tmdb.org/t/p/original'
     if (creditsLoading || recLoading) {
@@ -101,7 +102,7 @@ const style = {
         
 
         }
-        const res = await fetch("http://localhost:3001/movie-list", {
+        const res = await fetch(`${API_BASE_URL}/movie-list`, {
             method:"POST", //creates transaction
             body: JSON.stringify(movie_data),
             headers:{
@@ -137,7 +138,7 @@ const style = {
     
 
     }
-    const res = await fetch("http://localhost:3001/movie-list/recently-watched", {
+    const res = await fetch(`${API_BASE_URL}/movie-list/recently-watched`, {
         method:"POST", //creates movie
         body: JSON.stringify(movie_data),
         headers:{
@@ -158,7 +159,7 @@ const style = {
       console.log("the id to delete is: ", )
       console.log('the movie to delete is: ', movie?._id)
       const _id =  movie?._id
-      const res = await fetch(`http://localhost:3001/movie-list/${_id}`, {
+      const res = await fetch(`${API_BASE_URL}/movie-list/${_id}`, {
         method: "DELETE",
         
       });

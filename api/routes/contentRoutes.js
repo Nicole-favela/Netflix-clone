@@ -5,14 +5,6 @@ import express from 'express'
 import cors from 'cors'
 import * as dotenv from 'dotenv'
 
-import bodyParser from 'body-parser'
-//import connect from '../db/mongodb.js'
-import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
-import authenticateToken from '../utils/authenticate.js'
-
-
-import User from '../models/usermodel.js'
 dotenv.config()
 const API_KEY = process.env.API_KEY
 
@@ -33,11 +25,10 @@ router.get('/movie/popular', async (req, res) => {
   router.get('/movie/trailers', async (req, res) => {
     try {
       const movie_id = req.query.movie_id
-      //console.log('the movie id for trailers is: ', movie_id)
+    
       const response = await fetch(`https://api.themoviedb.org/3/movie/${movie_id}/videos?api_key=${API_KEY}`);
       const data = await response.json();
-      //console.log('the movie data from trailers is :', data)
-  
+     
       res.json(data);
     } catch (error) {
       console.error(error);
@@ -47,7 +38,6 @@ router.get('/movie/popular', async (req, res) => {
   router.get('/movie/recommendations', async (req, res) => {
     try {
       const movie_id = req.query.movie_id;
-      //console.log("movie id is: ", movie_id)
       const response = await fetch(`https://api.themoviedb.org/3/movie/${movie_id}/recommendations?api_key=${API_KEY}`);
       const data = await response.json();
   
@@ -62,7 +52,6 @@ router.get('/movie/popular', async (req, res) => {
       const movie_id = req.query.movie_id;
       const response = await fetch(`https://api.themoviedb.org/3/movie/${movie_id}/credits?api_key=${API_KEY}`);
       const data = await response.json();
-      //console.log('the data is: ', data)
   
       res.json(data);
     } catch (error) {

@@ -7,7 +7,6 @@ export default function useFetch(url){
     const [error,setError] = useState(null)
     const [loading,setLoading] = useState(false)
 
-    //const [horrormovies, setHorrormovies] = useState(''); 
     useEffect(() => {
      
    
@@ -25,7 +24,7 @@ export default function useFetch(url){
             }
         )()
     }, [url]);
-    //const filteredData = data.filter((movie) => genre_id.includes(movie.genre_id));
+    
     return { data, error, loading }
 
 }

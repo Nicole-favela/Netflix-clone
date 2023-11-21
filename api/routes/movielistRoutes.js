@@ -14,7 +14,7 @@ router.get('/:user_id',authenticateToken, async (req, res)=>{ //finds movies and
             _id: { $in: movie.map(m => m._id) }
         });
         const uniqueMovieDetails = uniqueMovies.map(async (title) => {
-            const movie = await Movies.findOne({ title });
+            const movie = await Movies.findOne({ title ,on_my_list: true});
             return {
                 _id: movie._id,
                 played: movie.played,
@@ -107,7 +107,7 @@ router.post('/',authenticateToken, async (req,res)=>{
     
     try {
         const { played, on_my_list,rating,id,title,overview,release_date, poster, user_id} = req.body
-        console.log('in post req for adding movie to list, user_id is: ', user_id)
+        console.log('in post req for adding movie to list, on my list  is: ', on_my_list)
         // Check if the movie exists in the database for the user
         const existingMovie = await Movies.findOne({ user_id, title });
     
@@ -116,7 +116,7 @@ router.post('/',authenticateToken, async (req,res)=>{
           // If the movie doesn't exist, create a new record
           const newMovie = new Movies({
              played,
-            on_my_list,
+            on_my_list: true,
             rating,
             id,
             title,

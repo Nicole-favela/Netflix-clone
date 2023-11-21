@@ -10,6 +10,7 @@ import { useSelector,useDispatch } from 'react-redux'
 import { selectUser, currentlyPlaying} from '../features/userSlice'
 import {jwtDecode} from 'jwt-decode'
 import Cookies from 'js-cookie';
+import { CONTENT_URLS, API_BASE_URL} from '../config/apiUrls.js';
 
 function Banner({fetchUserList}) {
   const dispatch = useDispatch()
@@ -24,7 +25,7 @@ function Banner({fetchUserList}) {
     
     const fetchPopular = async () => {
         try {
-          const res = await axios.get('http://localhost:3001/content/movie/popular');
+          const res = await axios.get(CONTENT_URLS.POPULAR_MOVIES);
           // Use res.data to access the response body
           setMovie(res.data.results[Math.floor(Math.random() * res.data.results.length -1)]);
           return res
@@ -52,7 +53,7 @@ function Banner({fetchUserList}) {
       
 
       }
-      const res = await fetch("http://localhost:3001/movie-list", {
+      const res = await fetch(`${API_BASE_URL}/movie-list`, {
           method:"POST", //creates transaction
           body: JSON.stringify(movie_data),
           headers:{

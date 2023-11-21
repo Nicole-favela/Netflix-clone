@@ -11,6 +11,7 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import useUserId from '../hooks/useUserId'
 import {jwtDecode} from 'jwt-decode'
+import {API_BASE_URL, CONTENT_URLS} from '../config/apiUrls'
 
 
 function Home() {
@@ -22,16 +23,16 @@ function Home() {
   const [loadingUserMovies, setLoadingUserMovies] = useState()
   const [loadingPlayedMovies, setLoadingPlayedMovies] = useState()
 
-  const horrorUrl = 'http://localhost:3001/content/discover/horror'
-  const popularUrl = 'http://localhost:3001/content/movie/popular'
-  const comedyUrl = 'http://localhost:3001/content/discover/comedy'
-  const scifiUrl= 'http://localhost:3001/content/discover/sci-fi'
+  const horrorUrl = CONTENT_URLS.HORROR
+  const popularUrl = CONTENT_URLS.POPULAR_MOVIES
+  const comedyUrl = CONTENT_URLS.COMEDY
+  const scifiUrl= CONTENT_URLS.SCIFI
   
-  const actionUrl = 'http://localhost:3001/content/discover/action'
-  const animationUrl = 'http://localhost:3001/content/discover/animation'
-  const crimeUrl = 'http://localhost:3001/content/discover/crime'
-  const thrillersUrl = 'http://localhost:3001/content/discover/thrillers'
-  const userUrl = 'http://localhost:3001/user'
+  const actionUrl = CONTENT_URLS.ACTION
+  const animationUrl = CONTENT_URLS.ANIMATION
+  const crimeUrl = CONTENT_URLS.CRIME
+  const thrillersUrl = CONTENT_URLS.THRILLER
+  //const userUrl = 'http://localhost:3001/user'
  
   const {data: horrorData ,loading: horrorLoading ,error: horrorError} = useFetch(horrorUrl)
   const {data: actionData ,loading: actionLoading ,error: actionError} = useFetch(actionUrl)
@@ -63,7 +64,7 @@ function Home() {
       }
 
     }catch(e){
-      console.log('troubel decoding in home', e)
+      console.log('trouble decoding in home', e)
 
     }
 }
@@ -74,12 +75,12 @@ fetchData()
   
   async function fetchUserList(user_id,  token){
       try{       
-        const mylistUrl= `http://localhost:3001/movie-list/${user_id}`
+        const mylistUrl= `${API_BASE_URL}/movie-list/${user_id}`
     
         setLoadingUserMovies(true)
         const headers = {'Authorization': `Bearer ${token}`}
         const res = await axios.get(mylistUrl, {headers})
-        console.log('fetch user list isL ', res.data)
+        console.log('fetch user list is ', res.data)
         
         setUserMovieList(res.data.data)
        
@@ -96,9 +97,9 @@ async function fetchPlayedList(user_id, token){
   try{
  
     const headers = {'Authorization': `Bearer ${token}`}
-    const myPlayedMoviesUrl= `http://localhost:3001/movie-list/recently-watched/${user_id}`
+    const myPlayedMoviesUrl= `${API_BASE_URL}/movie-list/recently-watched/${user_id}`
     const res = await axios.get(myPlayedMoviesUrl, {headers})
-    console.log('fetch played list isL ', res.data)
+    console.log('fetch played list is ', res.data)
    
     setPlayedMovie(res.data.data)
     
