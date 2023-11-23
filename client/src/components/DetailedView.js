@@ -156,8 +156,8 @@ const style = {
 
     }
     async function deleteFromList(movie){
-      console.log("the id to delete is: ", )
-      console.log('the movie to delete is: ', movie?._id)
+      //console.log("the id to delete is: ", )
+      console.log('the movie id to delete is: ', movie?._id)
       const _id =  movie?._id
       const res = await fetch(`${API_BASE_URL}/movie-list/${_id}`, {
         method: "DELETE",
@@ -165,7 +165,7 @@ const style = {
       });
       if(res.ok){
         fetchUserList(user_id, token) //updates and refetches transactions to display on table
-        window.alert("Removed From List")
+        //window.alert("Removed From List")
       }
 
     }

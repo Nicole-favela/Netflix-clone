@@ -81,8 +81,11 @@ fetchData()
         const headers = {'Authorization': `Bearer ${token}`}
         const res = await axios.get(mylistUrl, {headers})
         console.log('fetch user list is ', res.data)
-        
-        setUserMovieList(res.data.data)
+        // if(res.ok){
+          setUserMovieList(res.data.data)
+
+        // }
+       
        
       
   }catch(err){
