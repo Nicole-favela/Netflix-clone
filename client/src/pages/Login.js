@@ -15,6 +15,7 @@ function Login() {
   const [signIn, setSignIn]= useState(false)
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(null)
   const navigate = useNavigate();
   //for creating a new user
   const handleFormSubmit = async (e) => {
@@ -38,9 +39,15 @@ function Login() {
       navigate("/")// go to home page
       setSignIn(true)
     }
+    if(!res.ok){
+      const errorData = await res.json()
+      throw new Error(errorData.message)
+
+    }
      
     } catch (error) {
-      console.error(error);
+      setError(error.message)
+      
     }
   };
   //const [signUp, setSignUp] = useState(false)
@@ -69,6 +76,7 @@ function Login() {
           <>
           <h1>See what's next.  </h1>
           <h2>Cancel anytime.</h2>
+          {error && <p style={{color: 'red', fontSize: '15px'}}>{error}</p>}
           <div className='login__input'>
             <form>
               <input type="email" placeholder='Email 
