@@ -37,53 +37,47 @@ const darkTheme = createTheme({
 function SignIn({signup}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
   const dispatch = useDispatch()
   
   const navigate = useNavigate()
    
     const signIn= async (event) =>{
         event.preventDefault()
-
         try{
       
-        const form = {
-          email,
-          password,
-        }
-        const res = await fetch(`${API_BASE_URL}/auth/api/login`,{
-            method:'POST',
-            body: JSON.stringify(form),
-            headers:{
-                "content-type": "application/json"
-            }
-        })
-        console.log(res)
+          const form = {
+            email,
+            password,
+          }
+          const res = await fetch(`${API_BASE_URL}/auth/api/login`,{
+              method:'POST',
+              body: JSON.stringify(form),
+              headers:{
+                  "content-type": "application/json"
+              }
+          })
+          console.log(res)
+          if(!res.ok){
+            const errorData = await res.json();
+            throw new Error(errorData.error);
+          }
+          //check token from backend
+          const {token, user} = await res.json();
+      
+          Cookies.set("token", token);
+          dispatch(login({
+              email: user.email,
+              password: user.password,
+              loggedIn: true,
+              user_id: user._id,
 
-        //check token from backend
-        const {token, user} = await res.json();
-        if(!user){
-          console.log("user is null!")
-        }
-        console.log("user is: ", user.email)
-       
-        if(res.ok){
-           //alert('success, redirecting to home page...! user email is: ', user.email)
-           Cookies.set("token", token);
-           //Cookies.remove('token')
-         
-           dispatch(login({
-            email: user.email,
-            password: user.password,
-            loggedIn: true,
-            user_id: user._id,
-
-          
+            
           }));
-          navigate('/') //show home page
-        }
-       
+          navigate('/') 
+  
       }catch(e){
-        alert('the password or email was incorrect, please try again')
+        setError(e.message)
         navigate('/login') 
       }
      
@@ -103,7 +97,7 @@ function SignIn({signup}) {
             justifyContent: 'center',
           }}
         >
-         
+         {error && <p style={{ color: 'red', fontSize: '15px' }}>{error}</p>}
           {/* <Typography component="h1" variant="h5">
             Sign in
           </Typography> */}
