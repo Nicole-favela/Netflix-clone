@@ -6,7 +6,7 @@ import useFetch from '../hooks/useFetch'
 
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { selectMovies, selectUser, selectRecentlyPlayed } from '../features/userSlice'
+import { selectMovies, selectUser, selectRecentlyPlayed, addMovieToList } from '../features/userSlice'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import useUserId from '../hooks/useUserId'
@@ -27,13 +27,11 @@ function Home() {
   const popularUrl = CONTENT_URLS.POPULAR_MOVIES
   const comedyUrl = CONTENT_URLS.COMEDY
   const scifiUrl= CONTENT_URLS.SCIFI
-  
   const actionUrl = CONTENT_URLS.ACTION
   const animationUrl = CONTENT_URLS.ANIMATION
   const crimeUrl = CONTENT_URLS.CRIME
   const thrillersUrl = CONTENT_URLS.THRILLER
-  //const userUrl = 'http://localhost:3001/user'
- 
+  
   const {data: horrorData ,loading: horrorLoading ,error: horrorError} = useFetch(horrorUrl)
   const {data: actionData ,loading: actionLoading ,error: actionError} = useFetch(actionUrl)
   const {data: popularData ,loading: popularLoading ,error: popularError} = useFetch(popularUrl)
@@ -59,12 +57,10 @@ function Home() {
         await fetchPlayedList(user_id, token)
 
       }
-      else{
-        console.log('failed to decode in home')
-      }
+     
 
     }catch(e){
-      console.log('trouble decoding in home', e)
+      console.log('error fetching users data: ', e)
 
     }
 }
@@ -80,14 +76,13 @@ fetchData()
         setLoadingUserMovies(true)
         const headers = {'Authorization': `Bearer ${token}`}
         const res = await axios.get(mylistUrl, {headers})
-        console.log('fetch user list is ', res.data)
-        // if(res.ok){
-          setUserMovieList(res.data.data)
-
-        // }
+        console.log('fetch user list is ', res.data.data)
+        // Extract all movie IDs 
+        const movieIdsOnList = res.data.data.map(movie => movie.id);
+        //dispatch(addMovieToList(movieIdsOnList))
        
-       
-      
+        setUserMovieList(res.data.data)
+  
   }catch(err){
       console.error(err)
 
@@ -130,7 +125,7 @@ async function fetchPlayedList(user_id, token){
   return (
     <div className="home">
         <Nav/>
-        <Banner fetchUserList={fetchUserList}/>
+        <Banner fetchUserList={fetchUserList}  fetchPlayedList={fetchPlayedList} movieIdsOnList/>
         
       {!popularLoading &&
         <ContentRow

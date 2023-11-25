@@ -11,9 +11,10 @@ import { selectUser, currentlyPlaying} from '../features/userSlice'
 import {jwtDecode} from 'jwt-decode'
 import Cookies from 'js-cookie';
 import { CONTENT_URLS, API_BASE_URL} from '../config/apiUrls.js';
+import { addToPlayedList } from '../utils/addToPlayedList.js';
 
-function Banner({fetchUserList}) {
-  const dispatch = useDispatch()
+function Banner({fetchUserList,  fetchPlayedList, movieIdsOnList}) {
+    const dispatch = useDispatch()
     const user = useSelector(selectUser)
     const token = Cookies.get('token')
     const decoded = jwtDecode(token)
@@ -26,7 +27,6 @@ function Banner({fetchUserList}) {
     const fetchPopular = async () => {
         try {
           const res = await axios.get(CONTENT_URLS.POPULAR_MOVIES);
-          // Use res.data to access the response body
           setMovie(res.data.results[Math.floor(Math.random() * res.data.results.length -1)]);
           return res
         } catch (error) {
@@ -40,8 +40,6 @@ function Banner({fetchUserList}) {
     
     },[])
     async function addToList(movie){
-     
-      //console.log('you added movie: ', movie, 'to your list!!!!')
       const movie_data = {
           rating: like,
           id: movie.id,
@@ -68,7 +66,7 @@ function Banner({fetchUserList}) {
       }
    
   }
-    //console.log('the movies are: ', movie)
+  
   function truncateDescription(string, cutoffChar){
     return string?.length > cutoffChar ? string.substr(0, cutoffChar -1) + '...' : string;
 
@@ -76,7 +74,8 @@ function Banner({fetchUserList}) {
     const handlePlay=(selection)=>{
       setMovieId(selection?.id)
       setOpenVideoPlayer(true)
-
+      addToPlayedList(selection, user_id, token, fetchPlayedList,  movieIdsOnList)
+    
     }
   return (
     <header className='banner' style={{
@@ -107,13 +106,10 @@ function Banner({fetchUserList}) {
 
                 {/* test player here */}
                 <CardMedia/>
-                {/* {title, movieId, openVideoPlayer, setOpenVideoPlayer, setMovieId}){ */}
                 {(openVideoPlayer) && (
                     <VideoPlayer title={movie?.title ||  movie?.original_title} movieId = {movieId} openVideoPlayer={openVideoPlayer} setOpenVideoPlayer={setOpenVideoPlayer}  setMovieId={setMovieId}/>
                   
                 )
-                
-                 
                 }
             </div>
         </div>

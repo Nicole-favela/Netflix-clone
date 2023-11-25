@@ -43,15 +43,17 @@ export const getUserList = async (req, res) => {
   };
 export const getRecentlyWatched = async (req, res)=>{
     try{
-        
         const movie= await Movies.find({ "user_id": req.params.user_id, played: true }).sort({createdAt: -1})
+        console.log('GET RECENTLY WATCHED!!!!!!!!!!!!!!!! in recently watched movie is: ',  movie[0].title)
+        console.log('played status is: ', movie[0].played)
+        console.log('onlist  status is: ', movie[0].on_my_list)
+        console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!')
     
-
         const uniqueMovies = await Movies.distinct('title', {
             _id: { $in: movie.map(m => m._id) }
         });
         const uniqueMovieDetails = uniqueMovies.map(async (title) => {
-            const movie = await Movies.findOne({ title });
+            const movie = await Movies.findOne({ title});
             return {
                 _id: movie._id,
                 played: movie.played,
@@ -66,6 +68,9 @@ export const getRecentlyWatched = async (req, res)=>{
             };
         });
         const data = await Promise.all(uniqueMovieDetails);
+        
+        //console.log('movie is: ',  data)
+       
       
         res.json({data})
         //res.json(movie)
@@ -134,14 +139,21 @@ export const addMovieToList= async (req, res)=>{
 
 }
 export const addToRecentlyWatched= async (req, res)=>{
-    const { played, on_my_list,rating,id,title,overview,release_date, poster, user_id} = req.body
+    
    
     try {
         // Check if the movie exists in the database for the user
+        const { played, on_my_list,rating,id,title,overview,release_date, poster, user_id} = req.body
+        console.log('#################in recently watched movie is: ',  title)
+        // console.log('played status is: ', played)
+        console.log('onlist  status is: ', on_my_list)
+        // console.log('####################end############## ')
+
         const existingMovie = await Movies.findOne({ user_id, title });
        
     
         if (!existingMovie) {
+          console.log('movie doesnt exist yet, adding it')
           
           const newMovie = new Movies({
             played,
@@ -158,12 +170,21 @@ export const addToRecentlyWatched= async (req, res)=>{
           await newMovie.save();
           res.status(201).json({ message: 'Movie marked as recently watched.' });
         } else {
-       
+            console.log('####################end############## ')
+            console.log('movie DOES exist , updating it it')
+            console.log('#################in recently watched movie is: ',  existingMovie.title)
+           
+            console.log('onlist  status is: ', on_my_list)
           existingMovie.played = true;
-          existingMovie.on_my_list = on_my_list;
+          //existingMovie.on_my_list = on_my_list;
           existingMovie.rating = rating;
-    
+          if (on_my_list) {
+            existingMovie.on_my_list = on_my_list;
+          }
           await existingMovie.save();
+          console.log('played status is: ', existingMovie.played)
+          console.log('onlist  status is: ', existingMovie.on_my_list)
+          console.log('####################end############## ')
           res.status(200).json({ message: 'Movie updated as recently watched.' });
         }
       } catch (err) {

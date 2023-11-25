@@ -13,7 +13,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import { useNavigate } from 'react-router-dom';
 import {useDispatch} from "react-redux"
-import {login, logout} from "../features/userSlice"
+import {login} from "../features/userSlice"
 import { API_BASE_URL } from '../config/apiUrls';
 import Cookies from "js-cookie";
 const darkTheme = createTheme({
@@ -62,19 +62,18 @@ function SignIn({signup}) {
             const errorData = await res.json();
             throw new Error(errorData.error);
           }
-          //check token from backend
+          //get token from backend
           const {token, user} = await res.json();
-      
+          //set it in a cookie to remember user logged in
           Cookies.set("token", token);
           dispatch(login({
               email: user.email,
-              password: user.password,
               loggedIn: true,
               user_id: user._id,
 
             
           }));
-          navigate('/') 
+          navigate('/') //successful login, navigate to home
   
       }catch(e){
         setError(e.message)
@@ -98,9 +97,7 @@ function SignIn({signup}) {
           }}
         >
          {error && <p style={{ color: 'red', fontSize: '15px' }}>{error}</p>}
-          {/* <Typography component="h1" variant="h5">
-            Sign in
-          </Typography> */}
+      
           <Box component="form" onSubmit={signIn} noValidate sx={{ mt: 1,  }}>
             <TextField
               margin="normal"
@@ -125,10 +122,7 @@ function SignIn({signup}) {
               autoComplete="current-password"
               onChange={(e) => setPassword(e.target.value)}
             />
-            {/* <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            /> */}
+           
             <ThemeProvider theme={buttontheme}>
                 <Button
                 onClick={signIn}

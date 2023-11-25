@@ -27,7 +27,7 @@ export const userSlice = createSlice({
     logout: (state)=>{
       state.user = null;
     },
-    addMovie: (state, action) => {
+    addMovieToList: (state, action) => {
       state.movies.push(action.payload);
     },
     setPlayingMovie: (state, action)=>{
@@ -40,6 +40,7 @@ export const userSlice = createSlice({
       state.isPlaying = false;
 
     },
+    //use for list of played movie id's
     setRecentlyPlayedMovie: (state, action)=>{
       state.recentlyPlayed = state.recentlyPlayed.concat(action.payload); //concatenate new payload to array
       
@@ -51,7 +52,7 @@ export const userSlice = createSlice({
   },
 });
 //export our actions
-export const { login, logout, addMovie, setPlayingMovie, stopPlayingMovie, addTrailerUrl, setRecentlyPlayedMovie } = userSlice.actions;
+export const { login, logout, addMovieToList, setPlayingMovie, stopPlayingMovie, addTrailerUrl, setRecentlyPlayedMovie } = userSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
