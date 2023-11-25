@@ -7,9 +7,7 @@ import {stopPlayingMovie, setPlayingMovie, selectCurrentlyPlaying, selectIsPlayi
 
 function ContentRow({title, movies, fetchUserList, fetchPlayedList}) {
   const dispatch = useDispatch()
-  const currentlyPlaying = useSelector(selectCurrentlyPlaying) //gets movie id of latest playing movie
-  
-  
+ 
   const imgUrl = 'https://image.tmdb.org/t/p/original/'
   
   const [movieIndex, setMovieIndex] = useState(0)
@@ -23,20 +21,14 @@ function ContentRow({title, movies, fetchUserList, fetchPlayedList}) {
     console.log('the movie index is: ', i)
     setMovieIndex(i)
     console.log('movie index set to: ', movieIndex)
-    //dispatch(setPlayingMovie(movie[i]?.id))
-   
+  
   }
   const handleClose = () => {
     setOpen(false);
     dispatch(stopPlayingMovie())
     
   }
- 
- 
-  //console.log("movies for content row are: ", movies)
-  function showMoreInfo(){
-    return
-  }
+
   return (
     <div className='row'>
         

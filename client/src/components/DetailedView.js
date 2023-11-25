@@ -1,9 +1,7 @@
 import * as React from 'react';
 
 import Box from '@mui/material/Box';
-import Player from './Player';
 
-import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
 import useRecommendations from '../hooks/useRecommendations';
@@ -13,8 +11,7 @@ import './DetailedView.css'
 import { useSelector,useDispatch } from 'react-redux'
 import { selectUser, setPlayingMovie, selectCurrentlyPlaying, selectIsPlaying, setRecentlyPlayedMovie, selectRecentlyPlayed} from '../features/userSlice'
 import { useState, useEffect } from 'react';
-import CloseIcon from '@mui/icons-material/Close';
-import useFetch from '../hooks/useFetch';
+
 import VideoPlayer from './VideoPlayer';
 import Cookies from 'js-cookie';
 import {jwtDecode} from 'jwt-decode'
@@ -44,12 +41,12 @@ const style = {
     const playing = useSelector(selectIsPlaying)
     
     const [like, setLike] = useState(false)
-    //const [shouldFetchPlayed, setShouldFetchPlayed] = useState(false)
+    
     const [onlist, setOnList] = useState(false)
     const [recentlyPlayed, setRecentlyPlayed] = useState(false)
     const [openVideoPlayer, setOpenVideoPlayer] = useState(false)
     const [movieId, setMovieId] = useState(0)
-    const [credits, setCredits] = useState([])
+    
     const movieSeed =movies[movieIndex]?.id 
     const recommendationsUrl = `${API_BASE_URL}/content/movie/recommendations?movie_id=${movieSeed}`
     const {data: recommendations,loading: recLoading ,error: recError} = useRecommendations(recommendationsUrl)
@@ -80,7 +77,6 @@ const style = {
       if(!credits || credits === undefined ){
         return ''
       }
-      //console.log('movie credits in producers: ', credits?.crew)
       const topFive = credits?.crew?.filter(res=> res.job === 'Executive Producer' || res.job === 'Director')
       const names = topFive?.slice(0,3).map((producer)=> producer.name)
       
@@ -151,21 +147,17 @@ const style = {
       //fetchPlayedList()
    
     }
-    
-    
-
+  
     }
     async function deleteFromList(movie){
-      //console.log("the id to delete is: ", )
-      console.log('the movie id to delete is: ', movie?._id)
       const _id =  movie?._id
       const res = await fetch(`${API_BASE_URL}/movie-list/${_id}`, {
         method: "DELETE",
         
       });
       if(res.ok){
-        fetchUserList(user_id, token) //updates and refetches transactions to display on table
-        //window.alert("Removed From List")
+        fetchUserList(user_id, token) //updates and refetches after deletion
+       
       }
 
     }
@@ -181,14 +173,7 @@ const style = {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          {/* <Typography id="modal-modal-title" variant="h4" component="h2" sx={{color: 'white'}}>
-           
-          </Typography> */}
-          {/* <Typography id="modal-modal-description" sx={{ mt: 6, color: 'white' }}>
-            Movie title
-          </Typography> */}
-
-          {/* contents */}
+        
     <header className='banner' style={{
         backgroundSize: "cover",
         backgroundImage: `url("https://image.tmdb.org/t/p/original/${movies[movieIndex]?.backdrop_path || movies[movieIndex]?.poster}")`,
@@ -223,11 +208,7 @@ const style = {
                 <button className='detailedview__button'  onClick={()=>addToList(movies[movieIndex])}>
                 + My List
                  </button>
-               
-                
                 }
-               
-               
                 <ThumbUpIcon
                     color="inherit" 
                     onClick={()=>setLike(true)}
@@ -254,7 +235,7 @@ const style = {
             {(openVideoPlayer) &&  <VideoPlayer title={movies[movieIndex]?.title || movies[movieIndex]?.original_title} movieId ={movieId} openVideoPlayer={openVideoPlayer} setOpenVideoPlayer={setOpenVideoPlayer} setMovieId={setMovieId} />  }
 
               {/* more related episode options */}
-        {/* {!openVideoPlayer && ( */}
+      
         <div className='detailedview__description'>              
                 {(!recLoading && (recommendations?.length >=1 || recommendations !== undefined) ) &&
                 <>
