@@ -1,9 +1,9 @@
 import * as dotenv from 'dotenv'
 import Movies from '../models/movielistmodel.js'
-import authenticateToken from '../utils/authenticate.js'
+
 
 dotenv.config()
-const API_KEY = process.env.API_KEY
+
 
 export const getUserList = async (req, res) => {
        try{
@@ -31,7 +31,7 @@ export const getUserList = async (req, res) => {
         const data = await Promise.all(uniqueMovieDetails);
         //console.log('movie is: ', movie)
         res.json({data})
-        //res.json(movie)
+       
 
     }
     catch(err){
@@ -44,10 +44,7 @@ export const getUserList = async (req, res) => {
 export const getRecentlyWatched = async (req, res)=>{
     try{
         const movie= await Movies.find({ "user_id": req.params.user_id, played: true }).sort({createdAt: -1})
-        console.log('GET RECENTLY WATCHED!!!!!!!!!!!!!!!! in recently watched movie is: ',  movie[0].title)
-        console.log('played status is: ', movie[0].played)
-        console.log('onlist  status is: ', movie[0].on_my_list)
-        console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!')
+       
     
         const uniqueMovies = await Movies.distinct('title', {
             _id: { $in: movie.map(m => m._id) }
@@ -68,10 +65,7 @@ export const getRecentlyWatched = async (req, res)=>{
             };
         });
         const data = await Promise.all(uniqueMovieDetails);
-        
-        //console.log('movie is: ',  data)
-       
-      
+    
         res.json({data})
         //res.json(movie)
 
@@ -100,7 +94,7 @@ export const deleteMovie= async (req, res)=>{
 export const addMovieToList= async (req, res)=>{
     try {
         const { played, on_my_list,rating,id,title,overview,release_date, poster, user_id} = req.body
-        console.log('in post req for adding movie to list, on my list  is: ', on_my_list)
+       
         // Check if the movie exists in the database for the user
         const existingMovie = await Movies.findOne({ user_id, title });
     
@@ -123,7 +117,7 @@ export const addMovieToList= async (req, res)=>{
           await newMovie.save();
           return res.status(201).json({ message: 'Added to my list.' });
         } else { //movie already in db, update necessary fields
-        console.log('movie is already in db ', existingMovie)
+       
           existingMovie.user_id = user_id;
           existingMovie.played = played;
           existingMovie.on_my_list = true;
@@ -144,10 +138,7 @@ export const addToRecentlyWatched= async (req, res)=>{
     try {
         // Check if the movie exists in the database for the user
         const { played, on_my_list,rating,id,title,overview,release_date, poster, user_id} = req.body
-        console.log('#################in recently watched movie is: ',  title)
-        // console.log('played status is: ', played)
-        console.log('onlist  status is: ', on_my_list)
-        // console.log('####################end############## ')
+       
 
         const existingMovie = await Movies.findOne({ user_id, title });
        
@@ -170,21 +161,14 @@ export const addToRecentlyWatched= async (req, res)=>{
           await newMovie.save();
           res.status(201).json({ message: 'Movie marked as recently watched.' });
         } else {
-            console.log('####################end############## ')
-            console.log('movie DOES exist , updating it it')
-            console.log('#################in recently watched movie is: ',  existingMovie.title)
-           
-            console.log('onlist  status is: ', on_my_list)
+        
           existingMovie.played = true;
-          //existingMovie.on_my_list = on_my_list;
+         
           existingMovie.rating = rating;
           if (on_my_list) {
             existingMovie.on_my_list = on_my_list;
           }
           await existingMovie.save();
-          console.log('played status is: ', existingMovie.played)
-          console.log('onlist  status is: ', existingMovie.on_my_list)
-          console.log('####################end############## ')
           res.status(200).json({ message: 'Movie updated as recently watched.' });
         }
       } catch (err) {

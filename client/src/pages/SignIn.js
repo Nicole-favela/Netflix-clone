@@ -70,6 +70,7 @@ function SignIn({signup}) {
               email: user.email,
               loggedIn: true,
               user_id: user._id,
+              token
 
             
           }));

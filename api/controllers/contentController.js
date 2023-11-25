@@ -4,10 +4,12 @@ import * as dotenv from 'dotenv'
 
 dotenv.config()
 const API_KEY = process.env.API_KEY
+const BASE_URL = process.env.BASE_URL
+//https://api.themoviedb.org/3
 
 export const getPopularMovies = async (req, res) => {
     try {
-      const response = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`);
+      const response = await fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}`);
       const data = await response.json();
       res.json(data);
     } catch (error) {
@@ -17,7 +19,7 @@ export const getPopularMovies = async (req, res) => {
   };
   export const getComedyMovies = async (req, res) => {
     try {
-      const response = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&page=2&with_genres=35`);
+      const response = await fetch(`${BASE_URL}/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&page=2&with_genres=35`);
       const data = await response.json();
       res.json(data);
     } catch (error) {
@@ -27,7 +29,7 @@ export const getPopularMovies = async (req, res) => {
   };
   export const getScifiMovies = async (req, res) => {
     try {
-      const response = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&page=1&with_genres=878`);
+      const response = await fetch(`${BASE_URL}/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&page=1&with_genres=878`);
       const data = await response.json();
       res.json(data);
     } catch (error) {
@@ -37,7 +39,7 @@ export const getPopularMovies = async (req, res) => {
   };
   export const getThrillerMovies = async (req, res) => {
     try {
-      const response = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&page=1&with_genres=53`);
+      const response = await fetch(`${BASE_URL}/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&page=1&with_genres=53`);
       const data = await response.json();
       res.json(data);
     } catch (error) {
@@ -47,7 +49,7 @@ export const getPopularMovies = async (req, res) => {
   };
   export const getCrimeMovies = async (req, res) => {
     try {
-      const response = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&page=1&with_genres=80`);
+      const response = await fetch(`${BASE_URL}/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&page=1&with_genres=80`);
       const data = await response.json();
       res.json(data);
     } catch (error) {
@@ -57,7 +59,7 @@ export const getPopularMovies = async (req, res) => {
   };
   export const getActionMovies = async (req, res) => {
     try {
-      const response = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&page=1&with_genres=28`);
+      const response = await fetch(`${BASE_URL}/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&page=1&with_genres=28`);
       const data = await response.json();
       res.json(data);
     } catch (error) {
@@ -67,7 +69,7 @@ export const getPopularMovies = async (req, res) => {
   };
   export const getAnimatedMovies = async (req, res) => {
     try {
-      const response = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&page=1&with_genres=16`);
+      const response = await fetch(`${BASE_URL}/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&page=1&with_genres=16`);
       const data = await response.json();
       res.json(data);
     } catch (error) {
@@ -77,7 +79,7 @@ export const getPopularMovies = async (req, res) => {
   };
   export const getHorrorMovies = async (req, res) => {
     try {
-      const response = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&page=1&with_genres=27`);
+      const response = await fetch(`${BASE_URL}/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&page=1&with_genres=27`);
       const data = await response.json();
       res.json(data);
     } catch (error) {
@@ -88,7 +90,7 @@ export const getPopularMovies = async (req, res) => {
 export const getTrailers= async (req, res) => {
     try {
       const movie_id = req.query.movie_id
-      const response = await fetch(`https://api.themoviedb.org/3/movie/${movie_id}/videos?api_key=${API_KEY}`);
+      const response = await fetch(`${BASE_URL}/movie/${movie_id}/videos?api_key=${API_KEY}`);
       const data = await response.json();
       res.json(data);
     } catch (error) {
@@ -99,7 +101,7 @@ export const getTrailers= async (req, res) => {
   export const getCredits= async (req, res) => {
     try {
       const movie_id = req.query.movie_id
-      const response = await fetch(`https://api.themoviedb.org/3/movie/${movie_id}/credits?api_key=${API_KEY}`);
+      const response = await fetch(`${BASE_URL}/movie/${movie_id}/credits?api_key=${API_KEY}`);
       const data = await response.json();
       res.json(data);
     } catch (error) {
@@ -111,7 +113,7 @@ export const getTrailers= async (req, res) => {
     try {
         
       const movie_id = req.query.movie_id
-      const response = await fetch(`https://api.themoviedb.org/3/movie/${movie_id}/recommendations?api_key=${API_KEY}`);
+      const response = await fetch(`${BASE_URL}/movie/${movie_id}/recommendations?api_key=${API_KEY}`);
       const data = await response.json();
       res.json(data);
     } catch (error) {
