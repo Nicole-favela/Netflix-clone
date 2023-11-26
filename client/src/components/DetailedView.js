@@ -9,7 +9,7 @@ import useCredits from '../hooks/useCredits';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import './DetailedView.css'
 import { useSelector,useDispatch } from 'react-redux'
-import { selectUser, selectIsPlaying,  setMovieSelection} from '../features/userSlice'
+import { selectUser, selectIsPlaying,  setPlaying, setMovieSelection, selectCurrentMovie} from '../features/userSlice'
 import { useState, useEffect } from 'react';
 
 import VideoPlayer from './VideoPlayer';
@@ -32,9 +32,13 @@ const style = {
  
 };
 
- export default function BasicModal({open, movies, movieIndex, handleClose, fetchUserList, fetchPlayedList}) {
+ export default function BasicModal({open, handleClose, fetchUserList, fetchPlayedList}) {
     const dispatch = useDispatch()
     const user = useSelector(selectUser)
+    const newMovie = useSelector(selectCurrentMovie) //the movie selected: replaces movies[movieIndex]
+    const moviePoster = `url("https://image.tmdb.org/t/p/original/${newMovie?.backdrop_path || newMovie?.poster}")`
+    let newMoviePoster = ''
+    console.log('in detailed view the movie is: ', newMovie)
     //const selectedMovie = useSelector(selectCurrentMovie)
     const token = Cookies.get('token')
     const decoded = jwtDecode(token)
@@ -43,12 +47,13 @@ const style = {
     
     const [like, setLike] = useState(false)
     
+    
     const [onlist, setOnList] = useState(false)
     const [recentlyPlayed, setRecentlyPlayed] = useState(false)
     const [openVideoPlayer, setOpenVideoPlayer] = useState(false)
     
     
-    const movieSeed =movies[movieIndex]?.id //movie recommendations are based on- current movie selected
+    const movieSeed =newMovie?.id //movie recommendations are based on- current movie selected
     
     const recommendationsUrl = `${API_BASE_URL}/content/movie/recommendations?movie_id=${movieSeed}`
     const {data: recommendations,loading: recLoading ,error: recError} = useRecommendations(recommendationsUrl)
@@ -117,7 +122,7 @@ const style = {
     }
     
     async function addToPlayedList(movie){
-      dispatch(setMovieSelection(movie)) //set the current movie selected to play
+      dispatch(setPlaying(movie)) //set the current movie selected to play
       console.log('in add to played list function movie is: ', movie, 'and the movie id is: ', movie?.id)
       
       // setMovieId(movie?.id)
@@ -164,6 +169,10 @@ const style = {
       }
 
     }
+    const handleViewSwap=(newMovie)=>{
+      dispatch(setMovieSelection(newMovie))
+     
+    }
        
   return (
     
@@ -179,36 +188,36 @@ const style = {
         
     <header className='banner' style={{
         backgroundSize: "cover",
-        backgroundImage: `url("https://image.tmdb.org/t/p/original/${movies[movieIndex]?.backdrop_path || movies[movieIndex]?.poster}")`,
+        backgroundImage: moviePoster,
         backgroundPosition: "center center"
     }}>
      
         <div className='banner__contents'>
             <h4 className='banner__title'>
-                    {movies[movieIndex]?.title ||  movies[movieIndex]?.original_title}
+                    {newMovie?.title ||  newMovie?.original_title}
             </h4>
             <div className='banner__details'>
-            {new Date(movies[movieIndex]?.release_date).getFullYear() }
+            {new Date(newMovie?.release_date).getFullYear() }
                 <h2 className='banner__description'>
                  
-                  {truncateDescription(movies[movieIndex]?.overview, 200)}
+                  {truncateDescription(newMovie?.overview, 200)}
 
                 </h2>
 
             </div>
 
             <div className='banner__buttons'>
-                <button className='detailedview__button'  onClick={()=> addToPlayedList(movies[movieIndex])}>
+                <button className='detailedview__button'  onClick={()=> addToPlayedList(newMovie)}>
                     <PlayArrowRoundedIcon className='detailedview__button-icon' fontSize='small' />
                     Play
                 </button>
-                {movies[movieIndex]?.on_my_list ===true ? (
-                   <button className='detailedview__button'  onClick={()=>deleteFromList(movies[movieIndex])}>
+                {newMovie?.on_my_list ===true ? (
+                   <button className='detailedview__button'  onClick={()=>deleteFromList(newMovie)}>
                    Remove
                     </button>
                 
                 ):
-                <button className='detailedview__button'  onClick={()=>addToList(movies[movieIndex])}>
+                <button className='detailedview__button'  onClick={()=>addToList(newMovie)}>
                 + My List
                  </button>
                 }
@@ -250,7 +259,7 @@ const style = {
                         (recommendation.backdrop_path  && (
                             <div className='detailedview__container'>
                            
-                              <img className='detailedview__poster' key = {index} src={`${imgUrl}${recommendation?.backdrop_path || recommendation?.poster_path}`} alt = {recommendation?.name}/>
+                              <img className='detailedview__poster'  onClick={()=>handleViewSwap(recommendation)} key = {index} src={`${imgUrl}${recommendation?.backdrop_path || recommendation?.poster_path}`} alt = {recommendation?.name}/>
                               <h4 className='detailedview__moviename'>{truncateDescription(recommendation?.title, 15)}</h4>
                             </div>
                         )

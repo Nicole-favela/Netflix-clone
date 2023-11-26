@@ -6,7 +6,7 @@ import Player from './Player';
 import CloseIcon from '@mui/icons-material/Close';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrentMovie } from '../features/userSlice';
+import {selectCurrentMoviePlaying } from '../features/userSlice';
 const playerstyle = {
     position: 'relative',
     top: '50%',
@@ -28,7 +28,7 @@ export default function VideoPlayer({openVideoPlayer, setOpenVideoPlayer}){
       setOpenVideoPlayer(false)
       
     }
-    const movieSelected = useSelector(selectCurrentMovie)//the movie selected to play
+    const movieSelected = useSelector(selectCurrentMoviePlaying)//the movie selected to play
     const [open, setOpen] = useState(false)
    
     return(

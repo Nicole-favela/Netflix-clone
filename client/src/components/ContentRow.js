@@ -3,10 +3,11 @@ import './ContentRow.css'
 import axios from 'axios';
 import BasicModal from './DetailedView';
 import { useSelector,useDispatch } from 'react-redux'
-import { setPlayingMovie, selectCurrentlyPlaying, selectIsPlaying, currentlyPlaying} from '../features/userSlice'
+import { selectCurrentMovie, setMovieSelection} from '../features/userSlice'
 
 function ContentRow({title, movies, fetchUserList, fetchPlayedList}) {
   const dispatch = useDispatch()
+  const selectedMovie = useSelector(selectCurrentMovie)
  
   const imgUrl = 'https://image.tmdb.org/t/p/original/'
   
@@ -17,6 +18,8 @@ function ContentRow({title, movies, fetchUserList, fetchPlayedList}) {
  
  
   const handleOpen = (i, movie)=>{
+   
+    dispatch(setMovieSelection(movie))//save selected movie to global state
     setOpen(true)
     console.log('the movie index is: ', i)
     setMovieIndex(i)
@@ -25,7 +28,6 @@ function ContentRow({title, movies, fetchUserList, fetchPlayedList}) {
   }
   const handleClose = () => {
     setOpen(false);
-    // dispatch(stopPlayingMovie())
     
   }
 
@@ -34,7 +36,7 @@ function ContentRow({title, movies, fetchUserList, fetchPlayedList}) {
         
         <h2>{title}</h2>
         <div className='row__posters'>
-        <BasicModal open={open} movies={movies} movieIndex = {movieIndex} handleClose={handleClose} fetchUserList={fetchUserList} fetchPlayedList={fetchPlayedList}/>
+        <BasicModal open={open} handleClose={handleClose} fetchUserList={fetchUserList} fetchPlayedList={fetchPlayedList}/>
        
 
         {movies.map((movie,index)=>

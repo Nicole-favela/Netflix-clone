@@ -1,9 +1,6 @@
 import ReactPlayer from 'react-player'
 import React, { useState } from 'react'
-import useFetch from '../hooks/useFetch'
 import { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { selectCurrentlyPlaying } from '../features/userSlice'
 import axios from 'axios'
 import './Playerstyle.css'
 import { API_BASE_URL } from '../config/apiUrls'
@@ -11,7 +8,7 @@ import { API_BASE_URL } from '../config/apiUrls'
 
 function Player({movieId, setOpen}) {
     const [isOpen, setIsOpen] = useState(true)
-    const currentlyPlaying = useSelector(selectCurrentlyPlaying) //gets movie id of latest playing movie
+   
    
     const [loading, setLoading]= useState(true)
     const [data, setData] = useState([])

@@ -7,7 +7,7 @@ import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
 import { CardMedia } from '@mui/material';
 import VideoPlayer from './VideoPlayer';
 import { useSelector,useDispatch } from 'react-redux'
-import { selectUser, currentlyPlaying, setMovieSelection} from '../features/userSlice'
+import { selectUser, currentlyPlaying, setPlaying} from '../features/userSlice'
 import {jwtDecode} from 'jwt-decode'
 import Cookies from 'js-cookie';
 import { CONTENT_URLS, API_BASE_URL} from '../config/apiUrls.js';
@@ -72,7 +72,7 @@ function Banner({fetchUserList,  fetchPlayedList, movieIdsOnList}) {
 
     }
     const handlePlay=(selection)=>{
-      dispatch(setMovieSelection(movie))//add movie to play to global state
+      dispatch(setPlaying(movie))//add movie to play to global state
       setMovieId(selection?.id)
       setOpenVideoPlayer(true)
       addToPlayedList(selection, user_id, token, fetchPlayedList,  movieIdsOnList)
