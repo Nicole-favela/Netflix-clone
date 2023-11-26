@@ -9,7 +9,7 @@ import useCredits from '../hooks/useCredits';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import './DetailedView.css'
 import { useSelector,useDispatch } from 'react-redux'
-import { selectUser, setPlayingMovie, selectCurrentlyPlaying, selectIsPlaying, setRecentlyPlayedMovie, selectRecentlyPlayed} from '../features/userSlice'
+import { selectUser, selectIsPlaying,  setMovieSelection} from '../features/userSlice'
 import { useState, useEffect } from 'react';
 
 import VideoPlayer from './VideoPlayer';
@@ -35,6 +35,7 @@ const style = {
  export default function BasicModal({open, movies, movieIndex, handleClose, fetchUserList, fetchPlayedList}) {
     const dispatch = useDispatch()
     const user = useSelector(selectUser)
+    //const selectedMovie = useSelector(selectCurrentMovie)
     const token = Cookies.get('token')
     const decoded = jwtDecode(token)
     const user_id = decoded._id
@@ -45,9 +46,10 @@ const style = {
     const [onlist, setOnList] = useState(false)
     const [recentlyPlayed, setRecentlyPlayed] = useState(false)
     const [openVideoPlayer, setOpenVideoPlayer] = useState(false)
-    const [movieId, setMovieId] = useState(0)
     
-    const movieSeed =movies[movieIndex]?.id 
+    
+    const movieSeed =movies[movieIndex]?.id //movie recommendations are based on- current movie selected
+    
     const recommendationsUrl = `${API_BASE_URL}/content/movie/recommendations?movie_id=${movieSeed}`
     const {data: recommendations,loading: recLoading ,error: recError} = useRecommendations(recommendationsUrl)
 
@@ -115,9 +117,10 @@ const style = {
     }
     
     async function addToPlayedList(movie){
+      dispatch(setMovieSelection(movie)) //set the current movie selected to play
       console.log('in add to played list function movie is: ', movie, 'and the movie id is: ', movie?.id)
-      dispatch(setPlayingMovie(movie?.id))
-      setMovieId(movie?.id)
+      
+      // setMovieId(movie?.id)
       setOpenVideoPlayer(true)
       setRecentlyPlayed(true)
     
@@ -232,7 +235,7 @@ const style = {
                 Creators: {getProducers(movieCredits)}
               </div>
             )}
-            {(openVideoPlayer) &&  <VideoPlayer title={movies[movieIndex]?.title || movies[movieIndex]?.original_title} movieId ={movieId} openVideoPlayer={openVideoPlayer} setOpenVideoPlayer={setOpenVideoPlayer} setMovieId={setMovieId} />  }
+            {(openVideoPlayer) &&  <VideoPlayer  openVideoPlayer={openVideoPlayer} setOpenVideoPlayer={setOpenVideoPlayer} />  }
 
               {/* more related episode options */}
       

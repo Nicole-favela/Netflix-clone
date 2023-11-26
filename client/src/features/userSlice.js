@@ -14,9 +14,10 @@ export const userSlice = createSlice({
   initialState:{
     user: null,
     currentlyPlaying: null,
-    recentlyPlayed: [], //stores recently played movie data
+    
     isPlaying: false,
-    trailer: null,
+    currentMovieSelection: []
+   
   },
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
@@ -35,24 +36,23 @@ export const userSlice = createSlice({
       state.isPlaying = true;
 
     },
-    stopPlayingMovie: (state)=>{
-      state.currentlyPlaying = null;
-      state.isPlaying = false;
+    //TODO: one for selected movie id
+    setMovieSelection: (state, action)=>{
+      state.currentMovieSelection= action.payload;
 
     },
     //use for list of played movie id's
-    setRecentlyPlayedMovie: (state, action)=>{
-      state.recentlyPlayed = state.recentlyPlayed.concat(action.payload); //concatenate new payload to array
+    //TODO: delete
+    // setRecentlyPlayedMovie: (state, action)=>{
+    //   state.recentlyPlayed = state.recentlyPlayed.concat(action.payload); //concatenate new payload to array
       
 
-    },
-    addTrailerUrl: (state, action) => {
-      state.trailer.push(action.payload);
-    },
+    // },
+  
   },
 });
 //export our actions
-export const { login, logout, addMovieToList, setPlayingMovie, stopPlayingMovie, addTrailerUrl, setRecentlyPlayedMovie } = userSlice.actions;
+export const { login, logout, addMovieToList, setPlayingMovie, stopPlayingMovie, setMovieSelection } = userSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
@@ -61,8 +61,9 @@ export const selectUser = (state) => state.user.user;
 export const selectMovies = (state) => state.user.movies;
 export const selectCurrentlyPlaying = (state) => state.user.currentlyPlaying;
 export const selectIsPlaying = (state) => state.user.isPlaying;
-export const selectTrailer = (state)=> state.user.trailer
-export const selectRecentlyPlayed = (state)=> state.user.recentlyPlayed
+export const selectCurrentMovie = (state)=>state.user.currentMovieSelection;
+
+//export const selectRecentlyPlayed = (state)=> state.user.recentlyPlayed
 
 
 export default userSlice.reducer;

@@ -6,7 +6,7 @@ import useFetch from '../hooks/useFetch'
 
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { selectMovies, selectUser, selectRecentlyPlayed, addMovieToList } from '../features/userSlice'
+import { selectMovies, selectUser, addMovieToList } from '../features/userSlice'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import useUserId from '../hooks/useUserId'
@@ -17,7 +17,7 @@ import {API_BASE_URL, CONTENT_URLS} from '../config/apiUrls'
 function Home() {
   const user = useSelector(selectUser)
   
-  const dispatch= useDispatch(selectRecentlyPlayed)
+  //const dispatch= useDispatch(selectRecentlyPlayed)
   const [userMovieList, setUserMovieList] = useState([])
   const [playedMovies, setPlayedMovie] = useState([])
   const [loadingUserMovies, setLoadingUserMovies] = useState()

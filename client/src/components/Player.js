@@ -9,7 +9,7 @@ import './Playerstyle.css'
 import { API_BASE_URL } from '../config/apiUrls'
 
 
-function Player({movieId, setOpen, setMovieId}) {
+function Player({movieId, setOpen}) {
     const [isOpen, setIsOpen] = useState(true)
     const currentlyPlaying = useSelector(selectCurrentlyPlaying) //gets movie id of latest playing movie
    

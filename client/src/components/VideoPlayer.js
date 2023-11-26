@@ -5,6 +5,8 @@ import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
 import Player from './Player';
 import CloseIcon from '@mui/icons-material/Close';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { selectCurrentMovie } from '../features/userSlice';
 const playerstyle = {
     position: 'relative',
     top: '50%',
@@ -20,14 +22,15 @@ const playerstyle = {
    
   };
   
-export default function VideoPlayer({title, movieId, openVideoPlayer, setOpenVideoPlayer, setMovieId}){
+export default function VideoPlayer({openVideoPlayer, setOpenVideoPlayer}){
+  
     const handleCloseVideoPlayer =()=>{ 
       setOpenVideoPlayer(false)
-      //setShouldFetchPlayed(true)
+      
     }
+    const movieSelected = useSelector(selectCurrentMovie)//the movie selected to play
     const [open, setOpen] = useState(false)
-    console.log('in vid player and movie id is: ', movieId)
-    console.log('in vid player openVideoPlayer is: ',openVideoPlayer)
+   
     return(
       <Modal
       open={openVideoPlayer}
@@ -38,7 +41,7 @@ export default function VideoPlayer({title, movieId, openVideoPlayer, setOpenVid
       
       <Box sx={playerstyle}>
         <Typography id="modal-modal-title" variant="h4" component="h2" sx={{color: 'white'}}>
-          {title} Trailer
+          {movieSelected?.title || movieSelected?.original_title} Trailer
          
         </Typography>
   
@@ -47,7 +50,7 @@ export default function VideoPlayer({title, movieId, openVideoPlayer, setOpenVid
               </Box>
            
            
-             <Player movieId = {movieId} setOpen={setOpen} setMovieId={setMovieId}/>
+             <Player movieId = {movieSelected.id} setOpen={setOpen} />
             
       </Box>
     </Modal>

@@ -3,7 +3,7 @@ import './ContentRow.css'
 import axios from 'axios';
 import BasicModal from './DetailedView';
 import { useSelector,useDispatch } from 'react-redux'
-import {stopPlayingMovie, setPlayingMovie, selectCurrentlyPlaying, selectIsPlaying, currentlyPlaying} from '../features/userSlice'
+import { setPlayingMovie, selectCurrentlyPlaying, selectIsPlaying, currentlyPlaying} from '../features/userSlice'
 
 function ContentRow({title, movies, fetchUserList, fetchPlayedList}) {
   const dispatch = useDispatch()
@@ -25,7 +25,7 @@ function ContentRow({title, movies, fetchUserList, fetchPlayedList}) {
   }
   const handleClose = () => {
     setOpen(false);
-    dispatch(stopPlayingMovie())
+    // dispatch(stopPlayingMovie())
     
   }
 
