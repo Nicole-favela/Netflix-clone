@@ -10,6 +10,7 @@ Built with tmbd api, MUI components, react redux, and JWT authentication.
 - Ability to add or remove movies from your list
 - Youtube video player to watch trailers and clips
 - Your recently played movie trailers
+- View recommendations based on a particular title
 
 
 

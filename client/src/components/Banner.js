@@ -2,7 +2,7 @@ import React from 'react'
 import './Banner.css'
 import { useState , useEffect} from 'react';
 import axios from "axios";
-import url from '../constant.js'
+
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
 import { CardMedia } from '@mui/material';
 import VideoPlayer from './VideoPlayer';
