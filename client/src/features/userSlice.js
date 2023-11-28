@@ -32,7 +32,7 @@ export const userSlice = createSlice({
       state.currentMoviePlaying= action.payload;
 
     },
-    //used for the movie selected from the content view
+    //used for the movie selected from the content view and to swap detailed view with movie recommendation
     setMovieSelection: (state, action)=>{
       state.movieSelection= action.payload;
 
@@ -42,7 +42,7 @@ export const userSlice = createSlice({
   },
 });
 //export our actions
-export const { login, logout, addMovieToList, setPlayingMovie, stopPlayingMovie, setPlaying , setMovieSelection} = userSlice.actions;
+export const { login, logout, addMovieToList, setPlaying , setMovieSelection} = userSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

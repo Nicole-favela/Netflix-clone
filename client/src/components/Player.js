@@ -33,10 +33,8 @@ function Player({movieId, setOpen}) {
             const videosUrl = `${API_BASE_URL}/content/movie/trailers?movie_id=${movieId}`
             setLoading(true)
             const response = await axios.get(videosUrl)
-            console.log('In player response is: ', response)
             setData(response.data.results)
             const youtubeLink = setYoutubeLink(response.data.results);
-            console.log('In player YOUTUBE LINK Is: ', youtubeLink)
             setLink(youtubeLink);
             
         }catch(err){

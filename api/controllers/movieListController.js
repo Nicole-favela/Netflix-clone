@@ -99,7 +99,7 @@ export const addMovieToList= async (req, res)=>{
         const existingMovie = await Movies.findOne({ user_id, title });
     
         if (!existingMovie) {
-          console.log('movie IS NOT in db ')
+        
           // If the movie doesn't exist, create a new record
           const newMovie = new Movies({
              played,
@@ -138,13 +138,9 @@ export const addToRecentlyWatched= async (req, res)=>{
     try {
         // Check if the movie exists in the database for the user
         const { played, on_my_list,rating,id,title,overview,release_date, poster, user_id} = req.body
-       
-
         const existingMovie = await Movies.findOne({ user_id, title });
        
-    
         if (!existingMovie) {
-          console.log('movie doesnt exist yet, adding it')
           
           const newMovie = new Movies({
             played,

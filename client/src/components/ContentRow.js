@@ -21,9 +21,9 @@ function ContentRow({title, movies, fetchUserList, fetchPlayedList}) {
    
     dispatch(setMovieSelection(movie))//save selected movie to global state
     setOpen(true)
-    console.log('the movie index is: ', i)
+    // console.log('the movie index is: ', i)
     setMovieIndex(i)
-    console.log('movie index set to: ', movieIndex)
+    
   
   }
   const handleClose = () => {

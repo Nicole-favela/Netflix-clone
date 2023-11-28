@@ -37,17 +37,10 @@ const style = {
     const user = useSelector(selectUser)
     const newMovie = useSelector(selectCurrentMovie) //the movie selected: replaces movies[movieIndex]
     const moviePoster = `url("https://image.tmdb.org/t/p/original/${newMovie?.backdrop_path || newMovie?.poster}")`
-    let newMoviePoster = ''
-    console.log('in detailed view the movie is: ', newMovie)
-    //const selectedMovie = useSelector(selectCurrentMovie)
     const token = Cookies.get('token')
     const decoded = jwtDecode(token)
     const user_id = decoded._id
-    const playing = useSelector(selectIsPlaying)
-    
     const [like, setLike] = useState(false)
-    
-    
     const [onlist, setOnList] = useState(false)
     const [recentlyPlayed, setRecentlyPlayed] = useState(false)
     const [openVideoPlayer, setOpenVideoPlayer] = useState(false)
@@ -123,9 +116,6 @@ const style = {
     
     async function addToPlayedList(movie){
       dispatch(setPlaying(movie)) //set the current movie selected to play
-      console.log('in add to played list function movie is: ', movie, 'and the movie id is: ', movie?.id)
-      
-      // setMovieId(movie?.id)
       setOpenVideoPlayer(true)
       setRecentlyPlayed(true)
     

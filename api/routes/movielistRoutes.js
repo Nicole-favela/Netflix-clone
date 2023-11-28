@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import Movies from '../models/movielistmodel.js'
+
 import authenticateToken from '../utils/authenticate.js'
 
 import { addMovieToList, addToRecentlyWatched, deleteMovie, getRecentlyWatched, getUserList } from '../controllers/movieListController.js';
