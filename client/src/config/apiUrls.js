@@ -1,5 +1,5 @@
 
-const API_BASE_URL='http://localhost:3001'
+const API_BASE_URL='https://moviesbackend-4ugz.onrender.com'
 const CONTENT_URLS = {
   HORROR: `${API_BASE_URL}/content/discover/horror`,
   POPULAR_MOVIES: `${API_BASE_URL}/content/movie/popular`,
