@@ -149,7 +149,7 @@ function SignIn({signup}) {
               </Grid> */}
               <Grid item>
                 <Link href="/" variant="body2" sx={{color: "white"}}>
-                  {"New to Netflix? Sign Up"}
+                  {"New to the app? Sign Up"}
                 </Link>
               </Grid>
             </Grid>

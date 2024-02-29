@@ -1,17 +1,23 @@
 .login{
     position: relative;
     height: 100%;
-    background: url("https://springboard-cdn.appadvice.com/wp-content/appadvice-v2-media/2016/11/Netflix-background_860c8ece6b34fb4f43af02255ca8f225-xl.jpg") center no-repeat;
+    
+    background: url("https://img.freepik.com/premium-photo/home-movie-night-scene-with-popcorn-soft-throws-background-with-empty-space-text_829699-4702.jpg") center no-repeat;
     background-size: cover;
 }
+
+
 .login__logo{
     position:fixed;
     left: 0;
-    width: 130px;
+    width: 100px;
     object-fit: contain;
     padding-left: 20px;
     background-image: none;
    
+}
+.login__backgroundimg{
+    background-color: transparent;
 }
 
 

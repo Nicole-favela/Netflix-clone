@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
-import netflix_img from '../assets/netflix_transparent.png'
-import user_icon from '../assets/netflix_penguin.png'
+import nav_film_icon from '../assets/movie_icon3.png'
+import user_icon from '../assets/user_icon2.png'
 import { useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import "./Nav.css"
@@ -27,7 +27,7 @@ function Nav() {
   return (
     <div className={`nav ${show && "nav__black"}`}>
       <div className='nav__contents'>
-          <img className="nav__logo"src={netflix_img} alt="netflix-logo" onClick={()=>navigate('/',{replace: true})}/>
+          <img className="nav__logo"src={nav_film_icon} alt="logo" onClick={()=>navigate('/',{replace: true})}/>
 
          <img className="nav__avatar" src={user_icon} alt="user-avatar" onClick={()=>navigate('/profile',{replace: true})}/>
 

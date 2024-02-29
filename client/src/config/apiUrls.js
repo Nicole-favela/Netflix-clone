@@ -1,5 +1,5 @@
-const API_BASE_URL = 'https://netflix-clone-api-7fi7.onrender.com';
 
+const API_BASE_URL='http://localhost:3001'
 const CONTENT_URLS = {
   HORROR: `${API_BASE_URL}/content/discover/horror`,
   POPULAR_MOVIES: `${API_BASE_URL}/content/movie/popular`,

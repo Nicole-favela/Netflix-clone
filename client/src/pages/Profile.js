@@ -1,7 +1,7 @@
 import React from 'react'
 import Nav from '../components/Nav'
 import "./Profile.css"
-import user_icon from '../assets/netflix_penguin.png'
+import user_icon from '../assets/user_icon2.png'
 import { useSelector, useDispatch } from 'react-redux'
 import { selectUser } from '../features/userSlice'
 import {login, logout} from "../features/userSlice"

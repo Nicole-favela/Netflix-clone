@@ -1,9 +1,9 @@
 import React, {useState} from 'react'
 import './Login.css'
 import Button from '@mui/material/Button';
-import netflixbackground from '../assets/Netlfix_dummy_banner.webp'
-//import netflixlogo from '../assets/Netflix-logo-on-transparent-background.png'
-import netflixlogo from '../assets/netflix_transparent.png'
+
+
+import nav_film_icon from '../assets/movie_icon3.png'
 import SignIn from './SignIn';
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
@@ -56,7 +56,7 @@ function Login() {
         <div className='login__backgroundimg'>
             <img 
                 className ='login__logo' 
-                src={netflixlogo}
+                src={nav_film_icon}
                 alt=""
             />
             <button onClick={()=> setSignIn(true)} className='login__button'>

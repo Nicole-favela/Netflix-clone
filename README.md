@@ -1,11 +1,11 @@
-# Netflix clone
+# Online Streaming Movie Clone
 
 Built with tmbd api, MUI components, react redux, and JWT authentication.
 
 **features:**
 
 - User authentication
--  Intuitive Netflix like movie layout by popularity & genre
+-  Intuitive movie layout (that may remind you of a certain streaming service) that shows movies by popularity & genre
 - Profile page
 - Ability to add or remove movies from your list
 - Youtube video player to watch trailers and clips
